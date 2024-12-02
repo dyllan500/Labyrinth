@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://b06tojbwinvt"]
+
+[ext_resource type="Script" path="res://src/map/map.gd" id="1_02ah5"]
+[ext_resource type="PackedScene" uid="uid://io7qpgqsj488" path="res://src/map/wall_sprite.tscn" id="2_ye62w"]
+[ext_resource type="PackedScene" uid="uid://c6w0ibegm77p7" path="res://src/map/floor_sprite.tscn" id="3_cooxj"]
+
+[node name="Walls" type="Node2D"]
+script = ExtResource("1_02ah5")
+
+[node name="WallSprite" parent="." instance=ExtResource("2_ye62w")]
+visible = false
+
+[node name="FloorSprite" parent="." instance=ExtResource("3_cooxj")]
+visible = false

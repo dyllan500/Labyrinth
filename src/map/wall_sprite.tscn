@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://io7qpgqsj488"]
+
+[ext_resource type="Texture2D" uid="uid://dlo4gcin0vp2j" path="res://assets/colored-transparent.png" id="1_bw56t"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1d5td"]
+atlas = ExtResource("1_bw56t")
+region = Rect2(170, 289, 16, 16)
+
+[node name="WallSprite" type="Sprite2D"]
+texture = SubResource("AtlasTexture_1d5td")
+centered = false

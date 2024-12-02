@@ -2,7 +2,7 @@ class_name Player extends CharacterBody2D
 
 @export var TILE_SIZE = 16
 
-func get_input():
+func move():
 	var input_direction = Vector2(0,0)
 	if Input.is_action_just_pressed("right"):
 		input_direction = Vector2(1,0)
@@ -12,7 +12,14 @@ func get_input():
 		input_direction = Vector2(0,-1)
 	elif Input.is_action_just_pressed("down"):
 		input_direction = Vector2(0,1)
-	position += input_direction * TILE_SIZE
+		
+	if input_direction != Vector2(0, 0):
+		var target_position = position + input_direction * TILE_SIZE
+		var collision = move_and_collide(input_direction * TILE_SIZE)
+		if not collision:
+			position = target_position
+		else:
+			print("I collided with ", collision.get_collider().name)
 
 func _physics_process(delta):
-	get_input()
+	move()
