@@ -1,6 +1,9 @@
 class_name Player extends CharacterBody2D
-
+@onready var map: Node2D = get_node("/root/Game/Map")
 @export var TILE_SIZE = 16
+@export var health : float = 100.0
+@export var attack : float = 10.0
+
 
 func move():
 	var input_direction = Vector2(0,0)
@@ -20,6 +23,11 @@ func move():
 			position = target_position
 		else:
 			print("I collided with ", collision.get_collider().name)
+			if collision.get_collider().name.contains("Enemy"):
+					for i in map.get_children():
+						if i.name == collision.get_collider().name:
+							i.health = i.health - attack
+							print("hit")
 
 func _physics_process(delta):
 	move()

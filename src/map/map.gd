@@ -1,6 +1,7 @@
 extends Node2D
 
 @onready var player: CharacterBody2D = get_node("/root/Game/Player")
+@export var enemy_scene: PackedScene
 
 var width = 50
 var height = 50
@@ -8,22 +9,29 @@ var tile_size = 16
 
 var grid = []
 var map = []
+var rooms = []
 
 var wall_sprite_scene : PackedScene
 var floor_sprite_scene : PackedScene
 
 var min_room_size = 4
-var max_room_size = 8
+var max_room_size = 10
 var max_rooms = 10
 
 func _ready():
+	var screen_width = get_viewport().size.x
+	var screen_height = get_viewport().size.y
+	width = int(screen_width / tile_size)
+	height = int(screen_height / tile_size)
+	width = max(width, 10)
+	height = max(height, 10)
 	wall_sprite_scene = preload("res://src/map/wall_sprite.tscn")
 	floor_sprite_scene = preload("res://src/map/floor_sprite.tscn")
+	enemy_scene = preload("res://src/enemy/enemy.tscn")
 	generate_dungeon()
 	draw_dungeon()
 
 func generate_dungeon():
-	# Initialize map and grid with empty spaces
 	grid = []
 	for x in range(width):
 		grid.append([])
@@ -32,7 +40,6 @@ func generate_dungeon():
 			grid[x].append(0)
 			map[x].append({"type": "floor", "sprite": null, "visible": false})
 
-	var rooms = []
 	for i in range(max_rooms):
 		var room_width = randi() % (max_room_size - min_room_size) + min_room_size
 		var room_height = randi() % (max_room_size - min_room_size) + min_room_size
@@ -44,23 +51,15 @@ func generate_dungeon():
 			if new_room.intersects(room):
 				overlap = true
 				break
-		
 		if not overlap:
 			for x in range(new_room.position.x + 1, new_room.position.x + new_room.size.x - 1):
 				for y in range(new_room.position.y + 1, new_room.position.y + new_room.size.y - 1):
-					grid[x][y] = 2 # Floor
-			
-			for x in range(new_room.position.x, new_room.position.x + new_room.size.x):
-				grid[x][new_room.position.y] = 1  # Top wall
-				grid[x][new_room.position.y + new_room.size.y - 1] = 1  # Bottom wall
-			for y in range(new_room.position.y, new_room.position.y + new_room.size.y):
-				grid[new_room.position.x][y] = 1  # Left wall
-				grid[new_room.position.x + new_room.size.x - 1][y] = 1  # Right wall
+					grid[x][y] = 2  # Floor
 			rooms.append(new_room)
-			
 			if len(rooms) > 1:
 				var prev_room = rooms[rooms.size() - 2]
 				connect_rooms(prev_room, new_room)
+	place_walls()
 
 func connect_rooms(room1: Rect2, room2: Rect2):
 	var x1 = room1.position.x + room1.size.x / 2
@@ -92,7 +91,7 @@ func create_corridor(start: Vector2, end: Vector2):
 		elif y1 > y2:
 			y1 -= 1
 		
-		if grid[x1][y1] != 2:  # Avoid overwriting a floor space
+		if grid[x1][y1] != 2:
 			grid[x1][y1] = 2
 	place_walls_around_corridor(start, end)
 
@@ -118,7 +117,15 @@ func place_walls_around_corridor(start: Vector2, end: Vector2):
 				grid[x1 - 1][y] = 1  # Wall left of corridor
 			if x1 < width - 1 and grid[x1 + 1][y] == 0:
 				grid[x1 + 1][y] = 1  # Wall right of corridor
-				
+
+func place_walls():
+	for x in range(width):
+		for y in range(height):
+			if grid[x][y] == 0:
+				# Check if any of the adjacent tiles are floor (2) or corridor (1), if so, make this a wall
+				if (x > 0 and grid[x - 1][y] == 2) or (x < width - 1 and grid[x + 1][y] == 2) or (y > 0 and grid[x][y - 1] == 2) or (y < height - 1 and grid[x][y + 1] == 2):
+					grid[x][y] = 1
+
 func draw_dungeon():
 	for x in range(width):
 		for y in range(height):
@@ -140,7 +147,7 @@ func draw_dungeon():
 
 			if sprite_node:
 				sprite_node.position = Vector2(x * tile_size, y * tile_size)
-				sprite_node.visible = false
+				sprite_node.visible = true
 				add_child(sprite_node)
 				if collision_node:
 					collision_node.position = Vector2(x * tile_size + 8, y * tile_size + 8)
@@ -148,15 +155,15 @@ func draw_dungeon():
 				map[x][y] = {"type": tile_type, "sprite": sprite_node, "collision": collision_node, "visible": false}
 
 	place_player()
+	spawn_enemies()
 	reveal_tile(player.position)
 
 func _process(delta):
-		reveal_tile(player.position)
+	reveal_tile(player.position)
 
 func reveal_tile(position: Vector2):
 	var tile_x = int(position.x / tile_size)
 	var tile_y = int(position.y / tile_size)
-	
 	for dx in range(-3, 3 + 1):
 		for dy in range(-3, 3 + 1):
 			var reveal_x = tile_x + dx
@@ -167,13 +174,29 @@ func reveal_tile(position: Vector2):
 					if tile_data["sprite"] != null:
 						tile_data["sprite"].visible = true
 						tile_data["visible"] = true
-				
-func place_player():
+
+func get_random_floor_tile() -> Vector2:
 	var floor_tiles = []
-	for x in range(width):
-		for y in range(height):
-			if grid[x][y] == 2:
-				floor_tiles.append(Vector2(x, y))
+	for room in rooms:
+		for x in range(room.position.x + 1, room.position.x + room.size.x - 1):
+			for y in range(room.position.y + 1, room.position.y + room.size.y - 1):
+				if grid[x][y] == 2:
+					floor_tiles.append(Vector2(x, y))
 	if floor_tiles.size() > 0:
-		var random_tile = floor_tiles[randi() % floor_tiles.size()]
-		player.position = random_tile * tile_size
+		return floor_tiles[randi() % floor_tiles.size()]
+	else:
+		return Vector2(-1, -1)
+
+func place_player():
+	var random_floor_tile = get_random_floor_tile()
+	player.position = random_floor_tile * tile_size
+	
+func spawn_enemies():
+	var placed_enemies = 0
+	while placed_enemies < 5:
+			var random_floor_tile = get_random_floor_tile()
+			var enemy_instance = enemy_scene.instantiate()
+			enemy_instance.position = random_floor_tile * tile_size
+			print(enemy_instance.get_children())
+			add_child(enemy_instance)
+			placed_enemies += 1
