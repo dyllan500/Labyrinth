@@ -13,10 +13,14 @@ var rooms = []
 
 var wall_sprite_scene : PackedScene
 var floor_sprite_scene : PackedScene
+var door_sprite_scene : PackedScene
+var door_node : Sprite2D
 
 var min_room_size = 4
 var max_room_size = 10
 var max_rooms = 10
+
+var scan_range: Rect2  # To store the scan area
 
 func _ready():
 	var screen_width = get_viewport().size.x
@@ -27,7 +31,14 @@ func _ready():
 	height = max(height, 10)
 	wall_sprite_scene = preload("res://src/map/wall_sprite.tscn")
 	floor_sprite_scene = preload("res://src/map/floor_sprite.tscn")
+	door_sprite_scene = preload("res://src/map/door_sprite.tscn")
 	enemy_scene = preload("res://src/enemy/enemy.tscn")
+	generate_dungeon()
+	draw_dungeon()
+
+func new_map():
+	for child in get_children():
+		remove_child(child)
 	generate_dungeon()
 	draw_dungeon()
 
@@ -147,7 +158,7 @@ func draw_dungeon():
 
 			if sprite_node:
 				sprite_node.position = Vector2(x * tile_size, y * tile_size)
-				sprite_node.visible = true
+				sprite_node.visible = false
 				add_child(sprite_node)
 				if collision_node:
 					collision_node.position = Vector2(x * tile_size + 8, y * tile_size + 8)
@@ -156,6 +167,7 @@ func draw_dungeon():
 
 	place_player()
 	spawn_enemies()
+	place_door()
 	reveal_tile(player.position)
 
 func _process(delta):
@@ -174,6 +186,13 @@ func reveal_tile(position: Vector2):
 					if tile_data["sprite"] != null:
 						tile_data["sprite"].visible = true
 						tile_data["visible"] = true
+				for item in get_children():
+					if item is Enemy:
+						if item.position.distance_to(Vector2(reveal_x*tile_size, reveal_y*tile_size)) < tile_size:
+							item.visible = true
+					if item.name.contains("Door_Node"):
+						if item.position.distance_to(Vector2(reveal_x*tile_size, reveal_y*tile_size)) < tile_size:
+							item.visible = true
 
 func get_random_floor_tile() -> Vector2:
 	var floor_tiles = []
@@ -191,12 +210,31 @@ func place_player():
 	var random_floor_tile = get_random_floor_tile()
 	player.position = random_floor_tile * tile_size
 	
+func place_door():
+	var collision_node : StaticBody2D = null
+	door_node = door_sprite_scene.instantiate()
+	collision_node = StaticBody2D.new()
+	var collision_shape = CollisionShape2D.new()
+	var shape = RectangleShape2D.new()
+	shape.extents = Vector2(tile_size / 2, tile_size / 2)
+	collision_shape.shape = shape
+	collision_node.add_child(collision_shape)
+	collision_node.collision_layer = 2
+	collision_node.collision_mask = 1
+	var random_floor_tile = get_random_floor_tile()
+	door_node.position =  random_floor_tile * tile_size
+	door_node.name = "Door_Node"
+	collision_node.name = "Door_Collide"
+	door_node.visible = false
+	add_child(door_node)
+	collision_node.position = Vector2(random_floor_tile.x * tile_size + 8, random_floor_tile.y * tile_size + 8)
+	add_child(collision_node)
+	
 func spawn_enemies():
 	var placed_enemies = 0
 	while placed_enemies < 5:
 			var random_floor_tile = get_random_floor_tile()
 			var enemy_instance = enemy_scene.instantiate()
 			enemy_instance.position = random_floor_tile * tile_size
-			print(enemy_instance.get_children())
 			add_child(enemy_instance)
 			placed_enemies += 1

@@ -23,11 +23,17 @@ func move():
 			position = target_position
 		else:
 			print("I collided with ", collision.get_collider().name)
-			if collision.get_collider().name.contains("Enemy"):
-					for i in map.get_children():
-						if i.name == collision.get_collider().name:
-							i.health = i.health - attack
-							print("hit")
+			print(collision.get_collider_id())
+			for i in map.get_children():
+				if i.name == collision.get_collider().name and collision.get_collider().name.contains("Enemy"):
+					i.health = i.health - attack
+					print("hit")
+				if i.name.contains("Door_Collide"):
+					print(i.get_instance_id())
+				if i.name.contains("Door_Collide") and i.get_instance_id() == collision.get_collider_id():
+					print("Door")
+					position = target_position
+					map.new_map()
 
 func _physics_process(delta):
 	move()

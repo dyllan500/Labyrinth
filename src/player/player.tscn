@@ -23,4 +23,3 @@ centered = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(9, 8)
 shape = SubResource("RectangleShape2D_lqe0w")
-debug_color = Color(0.703356, 0.481014, 0.267412, 1)
