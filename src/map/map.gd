@@ -15,6 +15,8 @@ var grid = []
 var map = []
 var rooms = []
 
+var enemies = []
+
 var wall_sprite_scene : PackedScene
 var floor_sprite_scene : PackedScene
 var door_sprite_scene : PackedScene
@@ -24,7 +26,9 @@ var min_room_size = 4
 var max_room_size = 10
 var max_rooms = 10
 
-var scan_range: Rect2  # To store the scan area
+var scan_range: Rect2
+const entity_pathfinding_weight = 10.0
+@onready var pathfinder : AStarGrid2D = AStarGrid2D.new()
 
 func _ready():
 	var screen_width = get_viewport().size.x
@@ -51,14 +55,44 @@ func _ready():
 					items.append(item_resource)
 			file_name = dir.get_next()
 		dir.list_dir_end()
+	generate_dungeon()	
+	
+	pathfinder.region = Rect2i(0, 0, screen_width, screen_height)
+	pathfinder.update()
+	for x in range(width):
+		for y in range(height):
+			if grid[x][y] == 2:
+				pathfinder.set_point_solid(Vector2(x * tile_size, y * tile_size), true)
+			else:
+				pathfinder.set_point_solid(Vector2(x * tile_size, y * tile_size), false)
+				pathfinder.set_point_weight_scale(Vector2(x, y), entity_pathfinding_weight)
 
-	generate_dungeon()
+	pathfinder.update()
+	
 	draw_dungeon()
 
 func new_map():
 	for child in get_children():
 		remove_child(child)
+	grid = []
+	map = []
+	rooms = []
+	enemies.clear()
 	generate_dungeon()
+	var screen_width = get_viewport().size.x
+	var screen_height = get_viewport().size.y
+	pathfinder.clear()
+	pathfinder.region = Rect2i(0, 0, screen_width, screen_height)
+	pathfinder.update()
+	for x in range(width):
+		for y in range(height):
+			if grid[x][y] == 2:
+				pathfinder.set_point_solid(Vector2(x * tile_size, y * tile_size), true)
+			else:
+				pathfinder.set_point_solid(Vector2(x * tile_size, y * tile_size), false)
+				pathfinder.set_point_weight_scale(Vector2(x, y), entity_pathfinding_weight)
+
+	pathfinder.update()
 	draw_dungeon()
 
 func generate_dungeon():
@@ -157,6 +191,7 @@ func place_walls():
 					grid[x][y] = 1
 
 func draw_dungeon():
+	var count = 0
 	for x in range(width):
 		for y in range(height):
 			var tile_type = grid[x][y]
@@ -174,6 +209,7 @@ func draw_dungeon():
 				collision_node.collision_mask = 1
 			elif tile_type == 2:  # Floor tile
 				sprite_node = floor_sprite_scene.instantiate()
+				sprite_node.name = "Floor" + str(count)
 
 			if sprite_node:
 				sprite_node.position = Vector2(x * tile_size, y * tile_size)
@@ -183,6 +219,7 @@ func draw_dungeon():
 					collision_node.position = Vector2(x * tile_size + 8, y * tile_size + 8)
 					add_child(collision_node)
 				map[x][y] = {"type": tile_type, "sprite": sprite_node, "collision": collision_node, "visible": false}
+			count = count + 1
 
 	place_player()
 	spawn_enemies()
@@ -192,6 +229,15 @@ func draw_dungeon():
 
 func _process(delta):
 	reveal_tile(player.position)
+	
+	if not player.turn:
+		for enemy in enemies:
+			if enemy is Enemy:
+				if(enemy.health <= 0):
+					remove_child(enemy)	
+					enemies.erase(enemy)
+				enemy.move_enemy_towards_target()
+		player.turn = true
 
 func reveal_tile(position: Vector2):
 	var tile_x = int(position.x / tile_size)
@@ -257,6 +303,7 @@ func spawn_enemies():
 			var enemy_instance = enemy_scene.instantiate()
 			enemy_instance.position = random_floor_tile * tile_size
 			add_child(enemy_instance)
+			enemies.append(enemy_instance)
 			placed_enemies += 1
 			
 func place_items():

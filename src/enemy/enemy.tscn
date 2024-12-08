@@ -8,7 +8,7 @@ atlas = ExtResource("1_26yeu")
 region = Rect2(442, 136, 16, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t3i87"]
-size = Vector2(14, 8)
+size = Vector2(15, 15)
 
 [node name="Enemy" type="CharacterBody2D"]
 position = Vector2(-1, -4)
@@ -19,5 +19,5 @@ texture = SubResource("AtlasTexture_a7ihu")
 centered = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(8, 8)
+position = Vector2(8.5, 11.5)
 shape = SubResource("RectangleShape2D_t3i87")

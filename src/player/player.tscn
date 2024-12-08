@@ -9,7 +9,7 @@ atlas = ExtResource("1_l6mm7")
 region = Rect2(424, 0, 16, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lqe0w"]
-size = Vector2(12, 14)
+size = Vector2(13.3594, 14.9049)
 
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(-2, 0)
@@ -23,5 +23,5 @@ texture = SubResource("AtlasTexture_jef22")
 centered = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(9, 8)
+position = Vector2(8.67971, 7.45243)
 shape = SubResource("RectangleShape2D_lqe0w")

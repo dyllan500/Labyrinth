@@ -43,6 +43,7 @@ expand_icon = true
 [node name="buttonScore" type="Button" parent="."]
 texture_filter = 1
 layout_direction = 3
+layout_mode = 0
 offset_left = 432.0
 offset_top = 540.0
 offset_right = 940.0
@@ -53,6 +54,7 @@ expand_icon = true
 [node name="buttonQuit" type="Button" parent="."]
 texture_filter = 1
 layout_direction = 3
+layout_mode = 0
 offset_left = 980.0
 offset_top = 812.0
 offset_right = 1488.0
@@ -63,6 +65,7 @@ expand_icon = true
 [node name="buttonOption" type="Button" parent="."]
 texture_filter = 1
 layout_direction = 3
+layout_mode = 0
 offset_left = 432.0
 offset_top = 812.0
 offset_right = 940.0

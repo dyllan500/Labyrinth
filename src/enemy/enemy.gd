@@ -1,20 +1,36 @@
 class_name Enemy extends CharacterBody2D
 @onready var map: Node2D = get_node("/root/Game/Map")
-@export var TILE_SIZE = 16
-@export var health : float = 100.0
-@export var attack : float = 10.0
-
-func turn():
-	if(health <= 0):
-		for i in map.get_children():
-			if i.name == name:
-				map.remove_child(i)
-
-func _physics_process(delta):
-	turn()
+@export var tile_size = 16
+@export var health: float = 100.0
+@export var attack: float = 10.0
+@onready var player: CharacterBody2D = get_node("/root/Game/Player")
 
 func _ready():
 	collision_layer = 2
-	collision_mask = 1
-	visible = false
+	collision_mask = 3
+	visible = true
 	name = "Enemy"
+
+func _process(delta):
+	pass
+
+func move_enemy_towards_target():
+	var start_tile = Vector2(position.x / tile_size, position.y / tile_size)
+	var target_tile = Vector2(player.position.x / tile_size, player.position.y / tile_size)
+	var path = map.pathfinder.get_point_path(start_tile, target_tile)
+
+	if path.size() > 1:
+		var move = true
+		var next_tile = path[1]
+		var target_position = next_tile * tile_size
+		var tile_x = int(target_position.x / tile_size)
+		var tile_y = int(target_position.y / tile_size)
+		if target_position == player.position:
+				move = false
+				print("hit_player")
+		for enemey in map.enemies:
+			if target_position == enemey.position:
+				move = false
+		if tile_x < map.width and tile_y < map.height:
+			if map.grid[tile_x][tile_y] == 2 and move:
+				position = Vector2(tile_x * tile_size, tile_y * tile_size)

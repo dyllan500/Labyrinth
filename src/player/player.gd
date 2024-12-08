@@ -4,6 +4,7 @@ class_name Player extends CharacterBody2D
 @export var health : float = 100.0
 @export var attack : float = 10.0
 @export var inventory: Inventory
+@export var turn: bool = true
 
 func move():
 	var input_direction = Vector2(0,0)
@@ -17,17 +18,21 @@ func move():
 		input_direction = Vector2(0,1)
 		
 	if input_direction != Vector2(0, 0):
+		turn = false
+		var move = true
 		var target_position = position + input_direction * TILE_SIZE
-		var collision = move_and_collide(input_direction * TILE_SIZE)
-		if not collision:
-			position = target_position
-		else:
-			print("I collided with ", collision.get_collider().name)
-			print(collision.get_collider_id())
+		var tile_x = int(target_position.x / TILE_SIZE)
+		var tile_y = int(target_position.y / TILE_SIZE)
+		var collision = move_and_collide(target_position)
+		for enemy in map.enemies:
+			if target_position == enemy.position:
+				enemy.health = enemy.health - attack
+				print("hit_enemy")
+				move = false
+		if map.grid[tile_x][tile_y] == 2 and move:
+				position = Vector2(tile_x * TILE_SIZE, tile_y * TILE_SIZE)
+		if collision:
 			for i in map.get_children():
-				if i.name == collision.get_collider().name and collision.get_collider().name.contains("Enemy"):
-					i.health = i.health - attack
-					print("hit")
 				if i.name.contains("Door_Collide") and i.get_instance_id() == collision.get_collider_id():
 					position = target_position
 					map.new_map()
@@ -40,8 +45,10 @@ func move():
 					for child in map.get_children():
 						if child.name.contains(i.name):
 							map.remove_child(child)
-					
-	print(inventory.items)
-
+	#print(inventory.items)
+	
 func _physics_process(delta):
-	move()
+	if(health <= 0):
+		get_tree().quit()
+	if turn:
+		move()
