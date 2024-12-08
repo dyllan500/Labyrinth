@@ -5,8 +5,9 @@ class_name Player extends CharacterBody2D
 @export var attack : float = 10.0
 @export var inventory: Inventory
 @export var turn: bool = true
+@export var equipped: Inventory_Item
 
-func move():
+func player_turn():
 	var input_direction = Vector2(0,0)
 	if Input.is_action_just_pressed("right"):
 		input_direction = Vector2(1,0)
@@ -41,14 +42,17 @@ func move():
 					var item_name = i.name.split("_")[1]
 					for item in map.items:
 						if item.name == item_name:
-							inventory.add_item(item)
-					for child in map.get_children():
-						if child.name.contains(i.name):
-							map.remove_child(child)
-	#print(inventory.items)
+							if(inventory.add_item(item)):
+								for child in map.get_children():
+									if child.name.contains(i.name):
+										map.remove_child(child)
+							else:
+								print("inventory filled")
+	for item in inventory.items:
+		print(item.display_name)
 	
-func _physics_process(delta):
+func _physics_process(_delta):
 	if(health <= 0):
 		get_tree().quit()
 	if turn:
-		move()
+		player_turn()

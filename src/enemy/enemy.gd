@@ -11,7 +11,7 @@ func _ready():
 	visible = true
 	name = "Enemy"
 
-func _process(delta):
+func _process(_delta):
 	pass
 
 func move_enemy_towards_target():
