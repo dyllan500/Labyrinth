@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Inventory" load_steps=3 format=3 uid="uid://djdjfnxa08m4v"]
+
+[ext_resource type="Script" path="res://src/inventory/inventory.gd" id="1_j16vv"]
+[ext_resource type="Resource" uid="uid://dv1usyy7bv0ah" path="res://src/inventory/items/sword.tres" id="1_wbxtq"]
+
+[resource]
+script = ExtResource("1_j16vv")
+items = [ExtResource("1_wbxtq")]
+max_size = 20

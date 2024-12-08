@@ -1,9 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://dcws27td86q7y"]
+[gd_scene load_steps=4 format=3 uid="uid://dcws27td86q7y"]
 
 [ext_resource type="PackedScene" uid="uid://cipgvs73fidjw" path="res://src/player/player.tscn" id="1_bf0ae"]
+[ext_resource type="PackedScene" uid="uid://cq02it3c8dhqv" path="res://src/inventory/inventory_ui.tscn" id="3_fxlnv"]
 [ext_resource type="PackedScene" uid="uid://b06tojbwinvt" path="res://src/map/map.tscn" id="3_wck4k"]
 
 [node name="Game" type="Node2D"]
+
+[node name="Inventory" parent="." instance=ExtResource("3_fxlnv")]
 
 [node name="Map" parent="." instance=ExtResource("3_wck4k")]
 

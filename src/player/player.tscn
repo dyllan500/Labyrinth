@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cipgvs73fidjw"]
+[gd_scene load_steps=6 format=3 uid="uid://cipgvs73fidjw"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_gan80"]
 [ext_resource type="Texture2D" uid="uid://dlo4gcin0vp2j" path="res://assets/colored-transparent.png" id="1_l6mm7"]
+[ext_resource type="Resource" uid="uid://djdjfnxa08m4v" path="res://src/inventory/player_inventory.tres" id="2_yjn85"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jef22"]
 atlas = ExtResource("1_l6mm7")
@@ -15,6 +16,7 @@ position = Vector2(-2, 0)
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_gan80")
+inventory = ExtResource("2_yjn85")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = SubResource("AtlasTexture_jef22")

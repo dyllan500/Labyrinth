@@ -3,6 +3,10 @@ extends Node2D
 @onready var player: CharacterBody2D = get_node("/root/Game/Player")
 @export var enemy_scene: PackedScene
 
+var items_folder = "res://src/inventory/items/"
+@export var items = []
+var number_of_items = 10
+
 var width = 50
 var height = 50
 var tile_size = 16
@@ -33,6 +37,21 @@ func _ready():
 	floor_sprite_scene = preload("res://src/map/floor_sprite.tscn")
 	door_sprite_scene = preload("res://src/map/door_sprite.tscn")
 	enemy_scene = preload("res://src/enemy/enemy.tscn")
+
+	var dir = DirAccess.open(items_folder)
+	if dir != null:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		
+		while file_name != "":
+			if not dir.current_is_dir() and file_name.ends_with(".tres"):
+				var resource_path = items_folder + file_name
+				var item_resource = load(resource_path)
+				if item_resource:
+					items.append(item_resource)
+			file_name = dir.get_next()
+		dir.list_dir_end()
+
 	generate_dungeon()
 	draw_dungeon()
 
@@ -158,7 +177,7 @@ func draw_dungeon():
 
 			if sprite_node:
 				sprite_node.position = Vector2(x * tile_size, y * tile_size)
-				sprite_node.visible = false
+				sprite_node.visible = true
 				add_child(sprite_node)
 				if collision_node:
 					collision_node.position = Vector2(x * tile_size + 8, y * tile_size + 8)
@@ -168,6 +187,7 @@ func draw_dungeon():
 	place_player()
 	spawn_enemies()
 	place_door()
+	place_items()
 	reveal_tile(player.position)
 
 func _process(delta):
@@ -190,7 +210,7 @@ func reveal_tile(position: Vector2):
 					if item is Enemy:
 						if item.position.distance_to(Vector2(reveal_x*tile_size, reveal_y*tile_size)) < tile_size:
 							item.visible = true
-					if item.name.contains("Door_Node"):
+					else:
 						if item.position.distance_to(Vector2(reveal_x*tile_size, reveal_y*tile_size)) < tile_size:
 							item.visible = true
 
@@ -238,3 +258,28 @@ func spawn_enemies():
 			enemy_instance.position = random_floor_tile * tile_size
 			add_child(enemy_instance)
 			placed_enemies += 1
+			
+func place_items():
+	var item_num = 0
+	for i in range(3):
+		for item in items:
+			var random_floor_tile = get_random_floor_tile()
+			var sprite_node = Sprite2D.new()
+			var collision_node : StaticBody2D = null
+			sprite_node.texture = item.texture
+			collision_node = StaticBody2D.new()
+			var collision_shape = CollisionShape2D.new()
+			var shape = RectangleShape2D.new()
+			shape.extents = Vector2(tile_size / 2, tile_size / 2)
+			collision_shape.shape = shape
+			collision_node.add_child(collision_shape)
+			collision_node.collision_layer = 2
+			collision_node.collision_mask = 1
+			sprite_node.position = Vector2(random_floor_tile.x * tile_size + 8, random_floor_tile.y * tile_size + 8)
+			sprite_node.visible = true
+			sprite_node.name = "ITEM_" + item.name + "_" + str(item_num) + "_Sprite"
+			collision_node.name = "ITEM_" + item.name + "_" + str(item_num)
+			add_child(sprite_node)
+			collision_node.position = Vector2(random_floor_tile.x * tile_size + 8, random_floor_tile.y * tile_size + 8)
+			add_child(collision_node)
+			item_num = item_num + 1
