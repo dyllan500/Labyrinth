@@ -7,6 +7,8 @@ var items_folder = "res://src/inventory/items/"
 @export var items = []
 var number_of_items = 10
 
+var enemy_types = ["bat", "snake"]
+
 var width = 50
 var height = 50
 var tile_size = 16
@@ -297,14 +299,18 @@ func place_door():
 	add_child(collision_node)
 	
 func spawn_enemies():
-	var placed_enemies = 0
-	while placed_enemies < 5:
-			var random_floor_tile = get_random_floor_tile()
-			var enemy_instance = enemy_scene.instantiate()
-			enemy_instance.position = random_floor_tile * tile_size
-			add_child(enemy_instance)
-			enemies.append(enemy_instance)
-			placed_enemies += 1
+	var placed_enemies = 5
+	for i in range(placed_enemies):
+		var random_enemy_type = enemy_types[randi() % enemy_types.size()]
+		spawn_enemy(random_enemy_type)
+
+func spawn_enemy(enemy_type: String):
+	var enemy_scene = load("res://src/enemy/" + enemy_type + ".tscn")
+	var enemy_instance = enemy_scene.instantiate()
+	var random_floor_tile = get_random_floor_tile()
+	enemy_instance.position = random_floor_tile * tile_size
+	add_child(enemy_instance)
+	enemies.append(enemy_instance)
 			
 func place_items():
 	var item_num = 0
