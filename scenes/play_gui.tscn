@@ -1,0 +1,46 @@
+[gd_scene load_steps=4 format=3 uid="uid://bxgy4dcf3kswu"]
+
+[ext_resource type="PackedScene" uid="uid://c5o21xbdebyi2" path="res://scenes/heart.tscn" id="1_1o18x"]
+
+[sub_resource type="SystemFont" id="SystemFont_lss1m"]
+font_italic = true
+
+[sub_resource type="Theme" id="Theme_j2gmk"]
+default_font_size = 28
+Label/fonts/font = SubResource("SystemFont_lss1m")
+
+[node name="PlayGui" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 50.0
+offset_bottom = 50.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Heart" parent="VBoxContainer/HBoxContainer" instance=ExtResource("1_1o18x")]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+
+[node name="Heart2" parent="VBoxContainer/HBoxContainer" instance=ExtResource("1_1o18x")]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+
+[node name="Heart3" parent="VBoxContainer/HBoxContainer" instance=ExtResource("1_1o18x")]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+theme = SubResource("Theme_j2gmk")
+text = "Score"
+vertical_alignment = 1

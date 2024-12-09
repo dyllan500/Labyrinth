@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://c5o21xbdebyi2"]
+
+[ext_resource type="Texture2D" uid="uid://dlo4gcin0vp2j" path="res://assets/colored-transparent.png" id="1_0wtw8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6s47g"]
+atlas = ExtResource("1_0wtw8")
+region = Rect2(715, 171, 14, 14)
+
+[node name="Heart" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+texture_filter = 1
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 0
+offset_right = 14.0
+offset_bottom = 14.0
+scale = Vector2(2, 2)
+texture = SubResource("AtlasTexture_6s47g")
