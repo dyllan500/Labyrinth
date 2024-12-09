@@ -1,5 +1,6 @@
 class_name Player extends CharacterBody2D
 @onready var map: Node2D = get_node("/root/Game/Map")
+#@export var inventory_ui: Node = get_node("/root/Game/Inventory")
 @export var TILE_SIZE = 16
 @export var health : float = 100.0
 @export var attack : float = 10.0
@@ -17,6 +18,8 @@ func player_turn():
 		input_direction = Vector2(0,-1)
 	elif Input.is_action_just_pressed("down"):
 		input_direction = Vector2(0,1)
+	if Input.is_action_pressed("ui_inventory_toggle"):
+		toggle_inventory()
 		
 	if input_direction != Vector2(0, 0):
 		turn = false
@@ -48,8 +51,9 @@ func player_turn():
 										map.remove_child(child)
 							else:
 								print("inventory filled")
-	for item in inventory.items:
-		print(item.display_name)
+
+func toggle_inventory():
+	pass
 	
 func _physics_process(_delta):
 	if(health <= 0):

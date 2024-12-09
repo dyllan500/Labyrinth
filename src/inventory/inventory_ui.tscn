@@ -10,3 +10,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_iqq34")
+
+[node name="Tree" type="Tree" parent="."]
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 17.0

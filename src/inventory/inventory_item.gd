@@ -8,8 +8,9 @@ class_name Inventory_Item
 @export var damage: int
 @export var heal: int
 @export var duration: int
+@export var type: String = ""
 @export var description: String = ""
-
+@export var reveal: bool = false
 
 var prefixes = ["Aqua", "Ignis", "Terra", "Lux", "Nox", "Vita", "Mortis"]
 var roots = ["furo", "cael", "ventus", "lumen", "umbr", "sanct", "arc"]

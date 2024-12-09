@@ -4,9 +4,13 @@ extends Node2D
 
 var items_folder = "res://src/inventory/items/"
 @export var items = []
+var potion_types = ["heal", "posion"]
+var potion_descritpions = ["heal player", "damage player"]
 var items_num = 10
+var items_placed = []
 
-var enemy_types = ["bat", "snake"]
+var enemy_types = ["bat", "snake", "spider"]
+var enemies = []
 var enemies_num = 5
 
 var width = 50
@@ -16,8 +20,6 @@ var tile_size = 16
 var grid = []
 var map = []
 var rooms = []
-
-var enemies = []
 
 var wall_sprite_scene : PackedScene
 var floor_sprite_scene : PackedScene
@@ -47,6 +49,21 @@ func _ready():
 	generate_dungeon()	
 	add_pathfinding()
 	draw_dungeon()
+	
+	print_items()
+
+func print_items():
+	for item in items:
+		print("++ITEM++")
+		print(item.name)
+		print(item.display_name)
+		print(item.description)
+		print(item.damage)
+		print(item.heal)
+		print(item.duration)
+		print(item.type)
+		print(item.reveal)
+		
 
 func load_items():
 	var dir = DirAccess.open(items_folder)
@@ -57,14 +74,24 @@ func load_items():
 			if not dir.current_is_dir() and file_name.ends_with(".tres"):
 				var resource_path = items_folder + file_name
 				var item_resource = load(resource_path)
+				var item
 				if item_resource.name == "sword":
-					items.append(item_resource)
-				elif item_resource.name == "spell":
-					item_resource.display_name = item_resource.generate_latin_name()
-					items.append(item_resource)
+					item = item_resource.duplicate()
+					item.damage = 5
+					item.reveal = true
+					items.append(item)
 				elif item_resource.name == "potion":
-					item_resource.display_name = item_resource.generate_latin_name()
-					items.append(item_resource)
+					for i in range(potion_types.size()):
+						print(i)
+						print(potion_types[i])
+						item = item_resource.duplicate()
+						item.display_name = item_resource.generate_latin_name()
+						item.type = potion_types[i]
+						item.description = potion_descritpions[i]
+						item.damage = 5
+						item.heal = 10
+						item.reveal = false
+						items.append(item)
 			file_name = dir.get_next()
 		dir.list_dir_end()
 		
@@ -270,10 +297,26 @@ func get_random_floor_tile() -> Vector2:
 			for y in range(room.position.y + 1, room.position.y + room.size.y - 1):
 				if grid[x][y] == 2:
 					floor_tiles.append(Vector2(x, y))
-	if floor_tiles.size() > 0:
-		return floor_tiles[randi() % floor_tiles.size()]
-	else:
+	if floor_tiles.size() == 0:
+		print("No valid floor tiles available.")
 		return Vector2(-1, -1)
+	while true:
+		var place = true
+		var random_tile = floor_tiles[randi() % floor_tiles.size()]
+		for enemy in enemies:
+			if enemy.position == random_tile / tile_size:
+				place = false
+		for item in items_placed:
+			if item.position == random_tile / tile_size:
+				place = false
+		if player.position == random_tile / tile_size:
+				place = false
+		if door_node != null:
+			if door_node.position == random_tile / tile_size:
+					place = false
+		if place:
+			return random_tile
+	return Vector2(-1, -1) 
 
 func place_player():
 	var random_floor_tile = get_random_floor_tile()
@@ -335,4 +378,5 @@ func place_items():
 		add_child(sprite_node)
 		collision_node.position = Vector2(random_floor_tile.x * tile_size + 8, random_floor_tile.y * tile_size + 8)
 		add_child(collision_node)
+		items_placed.append(sprite_node)
 		item_count = item_count + 1
