@@ -7,6 +7,13 @@
 [node name="Game" type="Node2D"]
 
 [node name="PlayGui" parent="." instance=ExtResource("1_kmd3v")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="Map" parent="." instance=ExtResource("3_wck4k")]
 

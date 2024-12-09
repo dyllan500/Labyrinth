@@ -1,6 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bxgy4dcf3kswu"]
+[gd_scene load_steps=6 format=3 uid="uid://bxgy4dcf3kswu"]
 
 [ext_resource type="PackedScene" uid="uid://c5o21xbdebyi2" path="res://scenes/heart.tscn" id="1_1o18x"]
+[ext_resource type="Texture2D" uid="uid://csljrk45f7ul1" path="res://assets/9patch.png" id="2_uwrvp"]
+[ext_resource type="PackedScene" uid="uid://bjuw33amb8ur0" path="res://scenes/inventory_button.tscn" id="3_6m7n6"]
 
 [sub_resource type="SystemFont" id="SystemFont_lss1m"]
 font_italic = true
@@ -11,36 +13,202 @@ Label/fonts/font = SubResource("SystemFont_lss1m")
 
 [node name="PlayGui" type="Control"]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="TopLeft" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 10.0
 offset_top = 10.0
 offset_right = 50.0
 offset_bottom = 50.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HealthBar" type="HBoxContainer" parent="TopLeft"]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="Heart" parent="VBoxContainer/HBoxContainer" instance=ExtResource("1_1o18x")]
+[node name="Heart" parent="TopLeft/HealthBar" instance=ExtResource("1_1o18x")]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 
-[node name="Heart2" parent="VBoxContainer/HBoxContainer" instance=ExtResource("1_1o18x")]
+[node name="Heart2" parent="TopLeft/HealthBar" instance=ExtResource("1_1o18x")]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 
-[node name="Heart3" parent="VBoxContainer/HBoxContainer" instance=ExtResource("1_1o18x")]
+[node name="Heart3" parent="TopLeft/HealthBar" instance=ExtResource("1_1o18x")]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer"]
+[node name="Score" type="Label" parent="TopLeft"]
 texture_filter = 1
 layout_mode = 2
 theme = SubResource("Theme_j2gmk")
 text = "Score"
 vertical_alignment = 1
+
+[node name="InventoryUI" type="MarginContainer" parent="."]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 532)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -118.0
+offset_top = -96.0
+offset_right = 118.0
+offset_bottom = 96.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="InventoryUI"]
+layout_mode = 2
+texture = ExtResource("2_uwrvp")
+draw_center = false
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="InventoryRows" type="VBoxContainer" parent="InventoryUI"]
+custom_minimum_size = Vector2(656, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Seperator4" type="Control" parent="InventoryUI/InventoryRows"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Row1" type="HBoxContainer" parent="InventoryUI/InventoryRows"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button1" parent="InventoryUI/InventoryRows/Row1" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Button2" parent="InventoryUI/InventoryRows/Row1" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Button3" parent="InventoryUI/InventoryRows/Row1" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Button4" parent="InventoryUI/InventoryRows/Row1" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Button5" parent="InventoryUI/InventoryRows/Row1" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Row2" type="HBoxContainer" parent="InventoryUI/InventoryRows"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button1" parent="InventoryUI/InventoryRows/Row2" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Button2" parent="InventoryUI/InventoryRows/Row2" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Button3" parent="InventoryUI/InventoryRows/Row2" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Button4" parent="InventoryUI/InventoryRows/Row2" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Button5" parent="InventoryUI/InventoryRows/Row2" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Row3" type="HBoxContainer" parent="InventoryUI/InventoryRows"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button1" parent="InventoryUI/InventoryRows/Row3" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Button2" parent="InventoryUI/InventoryRows/Row3" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Button3" parent="InventoryUI/InventoryRows/Row3" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Button4" parent="InventoryUI/InventoryRows/Row3" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Button5" parent="InventoryUI/InventoryRows/Row3" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Row4" type="HBoxContainer" parent="InventoryUI/InventoryRows"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button1" parent="InventoryUI/InventoryRows/Row4" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Button2" parent="InventoryUI/InventoryRows/Row4" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Button3" parent="InventoryUI/InventoryRows/Row4" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Button4" parent="InventoryUI/InventoryRows/Row4" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Button5" parent="InventoryUI/InventoryRows/Row4" instance=ExtResource("3_6m7n6")]
+layout_mode = 2
+
+[node name="Seperator" type="Control" parent="InventoryUI/InventoryRows"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="InventoryUI/InventoryRows"]
+custom_minimum_size = Vector2(616, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="InventoryUI/InventoryRows/MarginContainer"]
+layout_mode = 2
+texture = ExtResource("2_uwrvp")
+draw_center = false
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InventoryUI/InventoryRows/MarginContainer"]
+layout_mode = 2
+
+[node name="Seperator2" type="Control" parent="InventoryUI/InventoryRows/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InventoryUI/InventoryRows/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Item Name" type="Label" parent="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Item Name"
+
+[node name="Description" type="Label" parent="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Item description"
+
+[node name="Seperator3" type="Control" parent="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Seperator5" type="Control" parent="InventoryUI/InventoryRows"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2

@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://bjuw33amb8ur0"]
+
+[ext_resource type="Texture2D" uid="uid://csljrk45f7ul1" path="res://assets/9patch.png" id="1_dy686"]
+
+[sub_resource type="ImageTexture" id="ImageTexture_6sbo8"]
+
+[node name="Button" type="Button"]
+custom_minimum_size = Vector2(120, 120)
+icon = SubResource("ImageTexture_6sbo8")
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_dy686")
+draw_center = false
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
