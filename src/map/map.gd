@@ -6,12 +6,22 @@ var items_folder = "res://src/inventory/items/"
 @export var items = []
 var potion_types = ["heal", "posion"]
 var potion_descritpions = ["heal player", "damage player"]
-var items_num = 10
+var items_num = 0
 var items_placed = []
+var item_weights = {
+	"food": 60,
+	"potion": 30,
+	"sword": 10
+}
 
 var enemy_types = ["bat", "snake", "spider"]
 var enemies = []
-var enemies_num = 5
+var enemies_num = 0
+var enemy_weights = {
+	"bat": 70,
+	"spider": 20,
+	"snake": 10
+}
 
 var width = 50
 var height = 50
@@ -29,6 +39,10 @@ var door_node : Sprite2D
 var min_room_size = 4
 var max_room_size = 10
 var max_rooms = 10
+var level = 1
+var boss_spawn_chance = 0
+var boss_count = 1
+var boss_level: bool = true
 
 var scan_range: Rect2
 const entity_pathfinding_weight = 10.0
@@ -37,6 +51,7 @@ const entity_pathfinding_weight = 10.0
 @onready var screen_height = get_viewport().size.y
 
 func _ready():
+	update_room_values()
 	width = int(screen_width / tile_size)
 	height = int(screen_height / tile_size)
 	width = max(width, 10)
@@ -49,8 +64,6 @@ func _ready():
 	generate_dungeon()	
 	add_pathfinding()
 	draw_dungeon()
-	
-	print_items()
 
 func print_items():
 	for item in items:
@@ -63,7 +76,6 @@ func print_items():
 		print(item.duration)
 		print(item.type)
 		print(item.reveal)
-		
 
 func load_items():
 	var dir = DirAccess.open(items_folder)
@@ -82,8 +94,6 @@ func load_items():
 					items.append(item)
 				elif item_resource.name == "potion":
 					for i in range(potion_types.size()):
-						print(i)
-						print(potion_types[i])
 						item = item_resource.duplicate()
 						item.display_name = item_resource.generate_latin_name()
 						item.type = potion_types[i]
@@ -92,6 +102,12 @@ func load_items():
 						item.heal = 10
 						item.reveal = false
 						items.append(item)
+				else:
+					item = item_resource.duplicate()
+					item.description = "Heal Player"
+					item.heal = 10
+					item.reveal = true
+					items.append(item)
 			file_name = dir.get_next()
 		dir.list_dir_end()
 		
@@ -114,6 +130,10 @@ func add_sword():
 			player.inventory.add_item(item)
 	
 func new_map():
+	level = level + 1
+	update_boss_spawn_chance()
+	boss_level =  is_boss_level()
+	update_room_values()
 	for child in get_children():
 		remove_child(child)
 	grid = []
@@ -125,7 +145,31 @@ func new_map():
 	add_pathfinding()
 	draw_dungeon()
 
+func after_boss_level():
+	boss_spawn_chance = 0
+	boss_count += 1
+
+func is_boss_level() -> bool:
+	return randf() * 100 < boss_spawn_chance	
+
+func update_room_values():
+	if boss_level:
+		min_room_size = 30
+		max_room_size = 35
+		max_rooms = 1
+	else:
+		min_room_size = 4
+		max_room_size = 10
+		max_rooms = 10
+
+func update_boss_spawn_chance():
+	if level % 3 == 0:
+		boss_spawn_chance += 20
+
 func generate_dungeon():
+	enemies_num = 3 + (level * 2)
+	items_num = 2 + (randi() % level / 2)
+	
 	grid = []
 	for x in range(width):
 		grid.append([])
@@ -255,17 +299,41 @@ func draw_dungeon():
 	spawn_enemies()
 	place_door()
 	place_items()
+	if boss_level:
+		spawn_boss_level()
 	reveal_tile(player.position)
+	
+func spawn_boss_level():
+	for i in range(boss_count):
+		spawn_enemy("minotaur")
+		
+func weighted_random(weight_dict: Dictionary) -> String:
+	var total_weight = 0
+	for weight in weight_dict.values():
+		total_weight += weight
+	
+	var random_value = randf() * total_weight
+	for key in weight_dict.keys():
+		random_value -= weight_dict[key]
+		if random_value <= 0:
+			return key
+	return ""
+	
+func drop_item():
+	for item in items:
+		if item.name == "food":
+			item.heal = 1 + (level * 1.5);
+			player.inventory.add_item(item)
 
 func _process(_delta):
 	reveal_tile(player.position)
-	
 	if not player.turn:
 		for enemy in enemies:
 			if enemy is Enemy:
 				if(enemy.health <= 0):
 					remove_child(enemy)	
 					enemies.erase(enemy)
+					drop_item()
 				enemy.move_enemy_towards_target()
 		player.turn = true
 
@@ -337,15 +405,18 @@ func place_door():
 	door_node.position =  random_floor_tile * tile_size
 	door_node.name = "Door_Node"
 	collision_node.name = "Door_Collide"
-	door_node.visible = false
+	door_node.visible = true
 	add_child(door_node)
 	collision_node.position = Vector2(random_floor_tile.x * tile_size + 8, random_floor_tile.y * tile_size + 8)
 	add_child(collision_node)
 	
 func spawn_enemies():
-	for i in range(enemies_num):
-		var random_enemy_type = enemy_types[randi() % enemy_types.size()]
-		spawn_enemy(random_enemy_type)
+	var amount = enemies_num
+	if boss_level:
+		amount = enemies_num / 3
+	for i in range(amount):
+		var spawn = weighted_random(enemy_weights);
+		spawn_enemy(spawn)
 
 func spawn_enemy(enemy_type: String):
 	var enemy_scene = load("res://src/enemy/" + enemy_type + ".tscn")
@@ -358,25 +429,42 @@ func spawn_enemy(enemy_type: String):
 func place_items():
 	var item_count = 0
 	for i in range(items_num):
-		var item = items[randi() % items.size()]
-		var random_floor_tile = get_random_floor_tile()
-		var sprite_node = Sprite2D.new()
-		var collision_node : StaticBody2D = null
-		sprite_node.texture = item.texture
-		collision_node = StaticBody2D.new()
-		var collision_shape = CollisionShape2D.new()
-		var shape = RectangleShape2D.new()
-		shape.extents = Vector2(tile_size / 2, tile_size / 2)
-		collision_shape.shape = shape
-		collision_node.add_child(collision_shape)
-		collision_node.collision_layer = 2
-		collision_node.collision_mask = 1
-		sprite_node.position = Vector2(random_floor_tile.x * tile_size + 8, random_floor_tile.y * tile_size + 8)
-		sprite_node.visible = true
-		sprite_node.name = "ITEM_" + item.name + "_" + str(item_count) + "_Sprite"
-		collision_node.name = "ITEM_" + item.name + "_" + str(item_count)
-		add_child(sprite_node)
-		collision_node.position = Vector2(random_floor_tile.x * tile_size + 8, random_floor_tile.y * tile_size + 8)
-		add_child(collision_node)
-		items_placed.append(sprite_node)
+		var spawn = weighted_random(item_weights);
+		for item in items:
+			if item.name == spawn:
+				place_item(item, item_count)
 		item_count = item_count + 1
+				
+func place_item(temp, item_count):
+	var item = temp.duplicate()
+	if item.name == "sword":
+		item.damage = 5 + (level * 1.5);
+	elif item.name == "food":
+		item.heal = 1 + (level * 1.5);
+	elif item.name == "spell":
+		if item.type == "heal":
+			item.heal = 4 + (level * 1.5);
+		elif item.type == "posion":
+			item.damage = 4 + (level * 1.5);
+		
+	var random_floor_tile = get_random_floor_tile()
+	var sprite_node = Sprite2D.new()
+	var collision_node : StaticBody2D = null
+	sprite_node.texture = item.texture
+	collision_node = StaticBody2D.new()
+	var collision_shape = CollisionShape2D.new()
+	var shape = RectangleShape2D.new()
+	shape.extents = Vector2(tile_size / 2, tile_size / 2)
+	collision_shape.shape = shape
+	collision_node.add_child(collision_shape)
+	collision_node.collision_layer = 2
+	collision_node.collision_mask = 1
+	sprite_node.position = Vector2(random_floor_tile.x * tile_size + 8, random_floor_tile.y * tile_size + 8)
+	sprite_node.visible = true
+	sprite_node.name = "ITEM_" + item.name + "_" + str(item_count) + "_Sprite"
+	collision_node.name = "ITEM_" + item.name + "_" + str(item_count)
+	add_child(sprite_node)
+	collision_node.position = Vector2(random_floor_tile.x * tile_size + 8, random_floor_tile.y * tile_size + 8)
+	add_child(collision_node)
+	items_placed.append(sprite_node)
+	item_count = item_count + 1

@@ -14,6 +14,9 @@ func _ready():
 func _process(_delta):
 	pass
 
+func take_damage(damage):
+	health = health - damage
+
 func move_enemy_towards_target():
 	var start_tile = Vector2(position.x / tile_size, position.y / tile_size)
 	var target_tile = Vector2(player.position.x / tile_size, player.position.y / tile_size)
@@ -27,6 +30,7 @@ func move_enemy_towards_target():
 		var tile_y = int(target_position.y / tile_size)
 		if target_position == player.position:
 				move = false
+				player.take_damage(attack)
 				print("hit_player")
 		for enemey in map.enemies:
 			if target_position == enemey.position:

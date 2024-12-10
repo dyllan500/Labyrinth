@@ -16,6 +16,7 @@ func add_item(item: Inventory_Item) -> bool:
 		items.append(item)
 		emit_signal("item_added", item)
 		return true
+	print("Inventoy Full")
 	return false
 
 func remove_item(item: Inventory_Item) -> bool:

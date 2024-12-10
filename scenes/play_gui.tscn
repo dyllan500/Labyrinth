@@ -6,6 +6,7 @@
 
 [sub_resource type="SystemFont" id="SystemFont_lss1m"]
 font_italic = true
+subpixel_positioning = 0
 
 [sub_resource type="Theme" id="Theme_j2gmk"]
 default_font_size = 28

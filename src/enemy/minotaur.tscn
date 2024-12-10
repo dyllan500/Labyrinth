@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://cjb2xixgv8fbc"]
+
+[ext_resource type="Script" path="res://src/enemy/minotaur.gd" id="1_p0oym"]
+[ext_resource type="Texture2D" uid="uid://dlo4gcin0vp2j" path="res://assets/colored-transparent.png" id="2_yvu53"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a7ihu"]
+atlas = ExtResource("2_yvu53")
+region = Rect2(510, 102, 16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t3i87"]
+size = Vector2(15, 15)
+
+[node name="Minotaur" type="CharacterBody2D"]
+position = Vector2(-1, -4)
+script = ExtResource("1_p0oym")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_a7ihu")
+centered = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(8.5, 11.5)
+shape = SubResource("RectangleShape2D_t3i87")
