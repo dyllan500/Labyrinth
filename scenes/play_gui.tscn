@@ -51,6 +51,7 @@ text = "Score"
 vertical_alignment = 1
 
 [node name="InventoryUI" type="MarginContainer" parent="."]
+z_index = 10
 texture_filter = 1
 custom_minimum_size = Vector2(0, 532)
 layout_mode = 1
