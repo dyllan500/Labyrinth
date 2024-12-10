@@ -1,12 +1,14 @@
 [gd_scene load_steps=3 format=3 uid="uid://bjuw33amb8ur0"]
 
+[ext_resource type="Script" path="res://scenes/inventory_button.gd" id="1_aivub"]
 [ext_resource type="Texture2D" uid="uid://csljrk45f7ul1" path="res://assets/9patch.png" id="1_dy686"]
 
-[sub_resource type="ImageTexture" id="ImageTexture_6sbo8"]
-
 [node name="Button" type="Button"]
+texture_filter = 1
 custom_minimum_size = Vector2(120, 120)
-icon = SubResource("ImageTexture_6sbo8")
+icon = ExtResource("1_dy686")
+icon_alignment = 1
+script = ExtResource("1_aivub")
 
 [node name="NinePatchRect2" type="NinePatchRect" parent="."]
 texture_filter = 1
