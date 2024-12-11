@@ -452,6 +452,6 @@ func place_item(temp, item_count):
 	sprite_node.texture = item.texture
 	sprite_node.position = Vector2(random_floor_tile.x * tile_size + 8, random_floor_tile.y * tile_size + 8)
 	sprite_node.visible = true
-	sprite_node.name = "ITEM_" + item.name + "_" + str(item_count) + "_Sprite"
+	sprite_node.name = "ITEM_" + item.display_name + "_" + str(item_count) + "_Sprite"
 	add_child(sprite_node)
 	items_placed.append(sprite_node)

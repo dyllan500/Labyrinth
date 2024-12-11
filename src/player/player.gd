@@ -55,7 +55,7 @@ func player_turn():
 				if i.name.contains("ITEM"):
 					var item_name = i.name.split("_")[1]
 					for item in map.items:
-						if item.name == item_name:
+						if item.display_name == item_name:
 							if(inventory.add_item(item)):
 								for child in map.get_children():
 									if child.name.contains(i.name):
@@ -64,8 +64,9 @@ func player_turn():
 				position = target_position
 	
 func _physics_process(_delta):
-	if turn:
-		player_turn()
 	if map.loading_map:
 		position = map.player_position
 		map.loading_map = false
+	else:
+		if turn:
+			player_turn()
