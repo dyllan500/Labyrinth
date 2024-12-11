@@ -36,6 +36,8 @@ var floor_sprite_scene : PackedScene
 var door_sprite_scene : PackedScene
 var door_node : Sprite2D
 
+var loading_map = false
+var player_position;
 var min_room_size = 4
 var max_room_size = 10
 var max_rooms = 10
@@ -51,7 +53,7 @@ const entity_pathfinding_weight = 10.0
 @onready var screen_height = get_viewport().size.y
 
 func _ready():
-	update_room_values()
+	loading_map = true
 	width = int(screen_width / tile_size)
 	height = int(screen_height / tile_size)
 	width = max(width, 10)
@@ -130,10 +132,10 @@ func add_sword():
 			player.inventory.add_item(item)
 	
 func new_map():
+	loading_map = true
 	level = level + 1
 	update_boss_spawn_chance()
 	boss_level =  is_boss_level()
-	update_room_values()
 	for child in get_children():
 		remove_child(child)
 	grid = []
@@ -167,6 +169,7 @@ func update_boss_spawn_chance():
 		boss_spawn_chance += 20
 
 func generate_dungeon():
+	update_room_values()
 	enemies_num = 3 + (level * 2)
 	items_num = 2 + (randi() % level / 2)
 	
@@ -338,7 +341,7 @@ func _process(_delta):
 		player.turn = true
 		
 func get_collison(player_position: Vector2, other_position: Vector2) -> bool:
-	return player_position.distance_to(other_position) <= 0.0
+	return player_position.distance_to(other_position) <= 0.0 or player_position.distance_to(other_position-Vector2(8,8)) <= 0.0
 		
 func get_floor(player_position: Vector2) -> Vector2:
 	var tile_x = int(player_position.x / tile_size)
@@ -378,7 +381,6 @@ func get_random_floor_tile() -> Vector2:
 				if grid[x][y] == 2:
 					floor_tiles.append(Vector2(x, y))
 	if floor_tiles.size() == 0:
-		print("No valid floor tiles available.")
 		return Vector2(-1, -1)
 	while true:
 		var place = true
@@ -400,28 +402,15 @@ func get_random_floor_tile() -> Vector2:
 
 func place_player():
 	var random_floor_tile = get_random_floor_tile()
-	player.position = random_floor_tile * tile_size
-	player.turn = false
+	player_position = random_floor_tile * tile_size
 	
 func place_door():
-	var collision_node : StaticBody2D = null
 	door_node = door_sprite_scene.instantiate()
-	collision_node = StaticBody2D.new()
-	var collision_shape = CollisionShape2D.new()
-	var shape = RectangleShape2D.new()
-	shape.extents = Vector2(tile_size / 2, tile_size / 2)
-	collision_shape.shape = shape
-	collision_node.add_child(collision_shape)
-	collision_node.collision_layer = 2
-	collision_node.collision_mask = 1
 	var random_floor_tile = get_random_floor_tile()
 	door_node.position =  random_floor_tile * tile_size
 	door_node.name = "Door_Node"
-	collision_node.name = "Door_Collide"
 	door_node.visible = true
 	add_child(door_node)
-	collision_node.position = Vector2(random_floor_tile.x * tile_size + 8, random_floor_tile.y * tile_size + 8)
-	add_child(collision_node)
 	
 func spawn_enemies():
 	var amount = enemies_num
@@ -440,13 +429,12 @@ func spawn_enemy(enemy_type: String):
 	enemies.append(enemy_instance)
 
 func place_items():
-	var item_count = 0
 	for i in range(items_num):
 		var spawn = weighted_random(item_weights);
 		for item in items:
 			if item.name == spawn:
-				place_item(item, item_count)
-		item_count = item_count + 1
+				place_item(item, i)
+				break
 				
 func place_item(temp, item_count):
 	var item = temp.duplicate()
@@ -462,22 +450,9 @@ func place_item(temp, item_count):
 		
 	var random_floor_tile = get_random_floor_tile()
 	var sprite_node = Sprite2D.new()
-	var collision_node : StaticBody2D = null
 	sprite_node.texture = item.texture
-	collision_node = StaticBody2D.new()
-	var collision_shape = CollisionShape2D.new()
-	var shape = RectangleShape2D.new()
-	shape.extents = Vector2(tile_size / 2, tile_size / 2)
-	collision_shape.shape = shape
-	collision_node.add_child(collision_shape)
-	collision_node.collision_layer = 2
-	collision_node.collision_mask = 1
 	sprite_node.position = Vector2(random_floor_tile.x * tile_size + 8, random_floor_tile.y * tile_size + 8)
 	sprite_node.visible = true
 	sprite_node.name = "ITEM_" + item.name + "_" + str(item_count) + "_Sprite"
-	collision_node.name = "ITEM_" + item.name + "_" + str(item_count)
 	add_child(sprite_node)
-	collision_node.position = Vector2(random_floor_tile.x * tile_size + 8, random_floor_tile.y * tile_size + 8)
-	add_child(collision_node)
 	items_placed.append(sprite_node)
-	item_count = item_count + 1

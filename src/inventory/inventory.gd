@@ -15,8 +15,6 @@ func add_item(item: Inventory_Item) -> bool:
 	if items.size() < max_size:
 		items.append(item)
 		emit_signal("item_added", item)
-		#for n in items.size():
-			#print(items[n].name);
 		return true
 	print("Inventory Full")
 	return false
