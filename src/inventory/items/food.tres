@@ -10,9 +10,11 @@ region = Rect2(561, 272, 16, 16)
 [resource]
 script = ExtResource("1_5t0gr")
 name = "food"
-display_name = ""
+display_name = "Food"
 texture = SubResource("AtlasTexture_guhjy")
 damage = 0
 heal = 0
 duration = 0
+type = ""
 description = ""
+reveal = false

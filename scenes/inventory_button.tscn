@@ -6,8 +6,8 @@
 [node name="Button" type="Button"]
 texture_filter = 1
 custom_minimum_size = Vector2(120, 120)
-icon = ExtResource("1_dy686")
 icon_alignment = 1
+expand_icon = true
 script = ExtResource("1_aivub")
 
 [node name="NinePatchRect2" type="NinePatchRect" parent="."]

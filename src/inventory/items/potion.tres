@@ -10,9 +10,11 @@ region = Rect2(544, 222, 16, 16)
 [resource]
 script = ExtResource("1_pnrof")
 name = "potion"
-display_name = ""
+display_name = "Unnamed Potion"
 texture = SubResource("AtlasTexture_jlfjs")
 damage = 0
 heal = 0
 duration = 0
+type = ""
 description = ""
+reveal = false

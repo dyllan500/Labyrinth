@@ -10,9 +10,11 @@ region = Rect2(544, 136, 16, 16)
 [resource]
 script = ExtResource("1_yq8ib")
 name = "sword"
-display_name = "sword"
+display_name = "Sword"
 texture = SubResource("AtlasTexture_ncesa")
 damage = 0
 heal = 0
 duration = 0
+type = ""
 description = "Hits Enemy Close Range"
+reveal = false

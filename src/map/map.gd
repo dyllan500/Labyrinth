@@ -4,8 +4,8 @@ extends Node2D
 
 var items_folder = "res://src/inventory/items/"
 @export var items = []
-var potion_types = ["heal", "posion"]
-var potion_descritpions = ["heal player", "damage player"]
+var potion_types = ["heal", "poison"]
+var potion_descriptions = ["Heal player", "Damage player"]
 var items_num = 0
 var items_placed = []
 var item_weights = {
@@ -97,7 +97,7 @@ func load_items():
 						item = item_resource.duplicate()
 						item.display_name = item_resource.generate_latin_name()
 						item.type = potion_types[i]
-						item.description = potion_descritpions[i]
+						item.description = potion_descriptions[i]
 						item.damage = 5
 						item.heal = 10
 						item.reveal = false

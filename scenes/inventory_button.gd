@@ -11,6 +11,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-func _on_inventory_opened() -> void:
-	pass
-	# icon = Sprite of item in inventory[slot];
+func _on_play_gui_inventory_toggled() -> void:
+	if slot < Inventory.items.size():
+		icon = Inventory.items[slot].texture;

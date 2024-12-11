@@ -4,7 +4,7 @@ class_name Inventory
 signal item_added(item)
 signal item_removed(item)
 
-@export var items : Array = [Inventory_Item]
+static var items : Array = [Inventory_Item]
 
 @export var max_size: int = 20
 
@@ -15,6 +15,8 @@ func add_item(item: Inventory_Item) -> bool:
 	if items.size() < max_size:
 		items.append(item)
 		emit_signal("item_added", item)
+		#for n in items.size():
+			#print(items[n].name);
 		return true
 	print("Inventory Full")
 	return false
