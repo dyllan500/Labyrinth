@@ -37,4 +37,4 @@ func move_enemy_towards_target():
 				move = false
 		if tile_x < map.width and tile_y < map.height:
 			if map.grid[tile_x][tile_y] == 2 and move:
-				position = Vector2(tile_x * tile_size, tile_y * tile_size)
+				position = target_position

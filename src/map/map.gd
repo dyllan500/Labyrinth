@@ -336,6 +336,18 @@ func _process(_delta):
 					drop_item()
 				enemy.move_enemy_towards_target()
 		player.turn = true
+		
+func get_collison(player_position: Vector2, other_position: Vector2) -> bool:
+	return player_position.distance_to(other_position) <= 0.0
+		
+func get_floor(player_position: Vector2) -> Vector2:
+	var tile_x = int(player_position.x / tile_size)
+	var tile_y = int(player_position.y / tile_size)
+	if tile_x >= 0 and tile_x < width and tile_y >= 0 and tile_y < height:
+		var tile_data = map[tile_x][tile_y]
+		if tile_data["sprite"] != null and tile_data["type"] == 2:
+			return tile_data["sprite"].position
+	return Vector2(0,0)
 
 func reveal_tile(player_position: Vector2):
 	var tile_x = int(player_position.x / tile_size)
@@ -389,6 +401,7 @@ func get_random_floor_tile() -> Vector2:
 func place_player():
 	var random_floor_tile = get_random_floor_tile()
 	player.position = random_floor_tile * tile_size
+	player.turn = false
 	
 func place_door():
 	var collision_node : StaticBody2D = null

@@ -35,29 +35,27 @@ func player_turn():
 	if input_direction != Vector2(0, 0):
 		turn = false
 		var move = true
-		var target_position = position + input_direction * TILE_SIZE
-		var tile_x = int(target_position.x / TILE_SIZE)
-		var tile_y = int(target_position.y / TILE_SIZE)
-		var collision = move_and_collide(target_position)
+		var target_position = map.get_floor(position + input_direction * TILE_SIZE)
+		if target_position == Vector2(0,0):
+			move = false
 		for enemy in map.enemies:
 			if target_position == enemy.position:
 				enemy.take_damage(attack)
 				print("hit_enemy")
 				move = false
-		if map.grid[tile_x][tile_y] == 2 and move:
-				position = Vector2(tile_x * TILE_SIZE, tile_y * TILE_SIZE)
-		if collision:
-			for i in map.get_children():
-				if i.name.contains("Door_Collide") and i.get_instance_id() == collision.get_collider_id():
-					position = target_position
+				
+		for i in map.get_children():
+			if map.get_collison(target_position, i.position):
+				print(i.name)
+				if i.name.contains("Door_Node"):
 					if not map.boss_level:
 						map.new_map()
 					else:
 						if map.enemies.size() <= 0:
 							map.new_map()
 							map.boss_level = false
-				if i.name.contains("ITEM") and i.get_instance_id() == collision.get_collider_id():
-					position = target_position
+				#FIX
+				if i.name.contains("ITEM"):
 					var item_name = i.name.split("_")[1]
 					for item in map.items:
 						if item.name == item_name:
@@ -65,6 +63,9 @@ func player_turn():
 								for child in map.get_children():
 									if child.name.contains(i.name):
 										map.remove_child(child)
+		if move:
+				position = target_position
+
 	
 func _physics_process(_delta):
 	if turn:
