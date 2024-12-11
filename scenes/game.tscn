@@ -16,7 +16,6 @@ grow_horizontal = 1
 grow_vertical = 1
 
 [node name="Map" parent="." instance=ExtResource("3_wck4k")]
-items = null
 
 [node name="Player" parent="." instance=ExtResource("1_bf0ae")]
 collision_layer = 7

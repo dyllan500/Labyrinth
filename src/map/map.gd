@@ -287,7 +287,6 @@ func draw_dungeon():
 			elif tile_type == 2:  # Floor tile
 				sprite_node = floor_sprite_scene.instantiate()
 				sprite_node.name = "Floor" + str(count)
-
 			if sprite_node:
 				sprite_node.position = Vector2(x * tile_size, y * tile_size)
 				sprite_node.visible = true
@@ -341,7 +340,7 @@ func _process(_delta):
 		player.turn = true
 		
 func get_collison(p_position: Vector2, other_position: Vector2) -> bool:
-	return position.distance_to(other_position) <= 0.0 or player_position.distance_to(other_position-Vector2(8,8)) <= 0.0
+	return p_position.distance_to(other_position) <= 0.0 or p_position.distance_to(other_position-Vector2(8,8)) <= 0.0
 		
 func get_floor(p_position: Vector2) -> Vector2:
 	var tile_x = int(p_position.x / tile_size)
@@ -350,7 +349,7 @@ func get_floor(p_position: Vector2) -> Vector2:
 		var tile_data = map[tile_x][tile_y]
 		if tile_data["sprite"] != null and tile_data["type"] == 2:
 			return tile_data["sprite"].position
-	return Vector2(0,0)
+	return Vector2(-1,-1)
 
 func reveal_tile(p_position: Vector2):
 	var tile_x = int(p_position.x / tile_size)
