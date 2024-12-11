@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://bxgy4dcf3kswu"]
+[gd_scene load_steps=10 format=3 uid="uid://bxgy4dcf3kswu"]
 
 [ext_resource type="PackedScene" uid="uid://c5o21xbdebyi2" path="res://scenes/heart.tscn" id="1_1o18x"]
 [ext_resource type="Shader" path="res://scenes/blur.gdshader" id="1_buxf8"]
 [ext_resource type="Script" path="res://scenes/play_gui.gd" id="1_yp7oh"]
 [ext_resource type="Texture2D" uid="uid://csljrk45f7ul1" path="res://assets/9patch.png" id="2_uwrvp"]
 [ext_resource type="PackedScene" uid="uid://bjuw33amb8ur0" path="res://scenes/inventory_button.tscn" id="3_6m7n6"]
+[ext_resource type="Script" path="res://scenes/inventory_text.gd" id="6_t8npc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6h0pc"]
 shader = ExtResource("1_buxf8")
@@ -216,20 +217,21 @@ layout_mode = 2
 custom_minimum_size = Vector2(5, 0)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="InventoryUI/InventoryRows/MarginContainer/HBoxContainer"]
+[node name="TextBox" type="VBoxContainer" parent="InventoryUI/InventoryRows/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
+script = ExtResource("6_t8npc")
 
-[node name="Item Name" type="Label" parent="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="ItemName" type="Label" parent="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
-text = "Item Name"
+text = "None"
 
-[node name="Description" type="Label" parent="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="Description" type="Label" parent="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox"]
 layout_mode = 2
-text = "Item description"
+text = "No item selected."
 
-[node name="Seperator3" type="Control" parent="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="Seperator3" type="Control" parent="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox"]
 layout_mode = 2
 
 [node name="Seperator5" type="Control" parent="InventoryUI/InventoryRows"]
@@ -256,3 +258,23 @@ layout_mode = 2
 [connection signal="inventory_toggled" from="." to="InventoryUI/InventoryRows/Row4/Button3" method="_on_play_gui_inventory_toggled"]
 [connection signal="inventory_toggled" from="." to="InventoryUI/InventoryRows/Row4/Button4" method="_on_play_gui_inventory_toggled"]
 [connection signal="inventory_toggled" from="." to="InventoryUI/InventoryRows/Row4/Button5" method="_on_play_gui_inventory_toggled"]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row1/Button1" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [0]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row1/Button2" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [1]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row1/Button3" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [2]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row1/Button4" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [3]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row1/Button5" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [4]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row2/Button1" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [5]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row2/Button2" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [6]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row2/Button3" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [7]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row2/Button4" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [8]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row2/Button5" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [9]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row3/Button1" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [10]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row3/Button2" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [11]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row3/Button3" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [12]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row3/Button4" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [13]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row3/Button5" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [14]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row4/Button1" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [15]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row4/Button2" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [16]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row4/Button3" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [17]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row4/Button4" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [18]]
+[connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row4/Button5" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [19]]
