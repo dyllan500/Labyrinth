@@ -6,6 +6,7 @@
 
 [node name="Walls" type="Node2D"]
 script = ExtResource("1_02ah5")
+items = null
 
 [node name="WallSprite" parent="." instance=ExtResource("2_ye62w")]
 visible = false

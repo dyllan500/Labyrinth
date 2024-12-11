@@ -340,21 +340,21 @@ func _process(_delta):
 				enemy.move_enemy_towards_target()
 		player.turn = true
 		
-func get_collison(player_position: Vector2, other_position: Vector2) -> bool:
-	return player_position.distance_to(other_position) <= 0.0 or player_position.distance_to(other_position-Vector2(8,8)) <= 0.0
+func get_collison(p_position: Vector2, other_position: Vector2) -> bool:
+	return position.distance_to(other_position) <= 0.0 or player_position.distance_to(other_position-Vector2(8,8)) <= 0.0
 		
-func get_floor(player_position: Vector2) -> Vector2:
-	var tile_x = int(player_position.x / tile_size)
-	var tile_y = int(player_position.y / tile_size)
+func get_floor(p_position: Vector2) -> Vector2:
+	var tile_x = int(p_position.x / tile_size)
+	var tile_y = int(p_position.y / tile_size)
 	if tile_x >= 0 and tile_x < width and tile_y >= 0 and tile_y < height:
 		var tile_data = map[tile_x][tile_y]
 		if tile_data["sprite"] != null and tile_data["type"] == 2:
 			return tile_data["sprite"].position
 	return Vector2(0,0)
 
-func reveal_tile(player_position: Vector2):
-	var tile_x = int(player_position.x / tile_size)
-	var tile_y = int(player_position.y / tile_size)
+func reveal_tile(p_position: Vector2):
+	var tile_x = int(p_position.x / tile_size)
+	var tile_y = int(p_position.y / tile_size)
 	for dx in range(-3, 3 + 1):
 		for dy in range(-3, 3 + 1):
 			var reveal_x = tile_x + dx
