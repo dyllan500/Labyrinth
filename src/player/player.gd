@@ -7,6 +7,8 @@ class_name Player extends CharacterBody2D
 @export var turn: bool = true
 @export var equipped: Inventory_Item
 
+signal inventory_toggled
+
 func take_damage(damage):
 	health = health - damage
 	if (health <= 0):
@@ -27,8 +29,8 @@ func player_turn():
 		input_direction = Vector2(0,-1)
 	elif Input.is_action_just_pressed("down"):
 		input_direction = Vector2(0,1)
-	if Input.is_action_pressed("ui_inventory_toggle"):
-		toggle_inventory()
+	if   Input.is_action_just_pressed("ui_inventory_toggle"):
+		inventory_toggled.emit()
 		
 	if input_direction != Vector2(0, 0):
 		turn = false
@@ -63,9 +65,6 @@ func player_turn():
 								for child in map.get_children():
 									if child.name.contains(i.name):
 										map.remove_child(child)
-
-func toggle_inventory():
-	pass
 	
 func _physics_process(_delta):
 	if turn:

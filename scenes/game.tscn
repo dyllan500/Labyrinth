@@ -20,3 +20,5 @@ grow_vertical = 1
 [node name="Player" parent="." instance=ExtResource("1_bf0ae")]
 collision_layer = 7
 collision_mask = 2
+
+[connection signal="inventory_toggled" from="Player" to="PlayGui" method="_on_player_inventory_toggled"]

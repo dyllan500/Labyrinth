@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://bxgy4dcf3kswu"]
+[gd_scene load_steps=9 format=3 uid="uid://bxgy4dcf3kswu"]
 
 [ext_resource type="PackedScene" uid="uid://c5o21xbdebyi2" path="res://scenes/heart.tscn" id="1_1o18x"]
 [ext_resource type="Shader" path="res://scenes/blur.gdshader" id="1_buxf8"]
+[ext_resource type="Script" path="res://scenes/play_gui.gd" id="1_yp7oh"]
 [ext_resource type="Texture2D" uid="uid://csljrk45f7ul1" path="res://assets/9patch.png" id="2_uwrvp"]
 [ext_resource type="PackedScene" uid="uid://bjuw33amb8ur0" path="res://scenes/inventory_button.tscn" id="3_6m7n6"]
 
@@ -26,8 +27,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_yp7oh")
 
 [node name="Blur" type="ColorRect" parent="."]
+visible = false
 z_index = -1
 material = SubResource("ShaderMaterial_6h0pc")
 layout_mode = 1
@@ -69,6 +72,7 @@ text = "Score"
 vertical_alignment = 1
 
 [node name="InventoryUI" type="MarginContainer" parent="."]
+visible = false
 texture_filter = 1
 custom_minimum_size = Vector2(0, 532)
 layout_mode = 1
