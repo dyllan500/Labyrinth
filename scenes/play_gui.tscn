@@ -231,6 +231,9 @@ text = "None"
 layout_mode = 2
 text = "No item selected."
 
+[node name="Damage_Heal" type="Label" parent="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox"]
+layout_mode = 2
+
 [node name="Seperator3" type="Control" parent="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox"]
 layout_mode = 2
 
