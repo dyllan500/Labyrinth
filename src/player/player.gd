@@ -64,12 +64,12 @@ func player_turn():
 		turn = false
 		var move = true
 		var target_position = map.get_floor(position + input_direction * TILE_SIZE)
-		if target_position == Vector2(0,0):
+		if target_position == Vector2(0,0) or target_position == Vector2(-1,-1):
 			move = false
 		for enemy in map.enemies:
 			if target_position == enemy.position:
 				enemy.take_damage(equiped.damage)
-				print("hit_enemy")
+				gui.add_line("Player hit emeny for " + str(equiped.damage))
 				move = false
 		for i in map.get_children():
 			if map.get_collison(target_position, i.position):
@@ -84,25 +84,36 @@ func player_turn():
 					var item_name = i.name.split("_")[1]
 					for item in map.items:
 						if item.display_name == item_name:
-							if(inventory.add_item(item)):
+							var temp = item.duplicate()
+							map.create_item(temp)
+							if(inventory.add_item(temp)):
 								for child in map.get_children():
 									if child.name.contains(i.name):
 										map.remove_child(child)
 		if move:
-				position = target_position
+			position = target_position
 
 func use_potion():
 	var potion = inventory.items[pressed_slot]
 	if potion.heal > 0:
 		heal(potion.heal)
+		gui.add_line("Player healed for " + str(potion.heal))
 	else:
 		take_damage(potion.damage)
+		gui.add_line("Player damaged for " + str(potion.damage))
 	inventory.remove_item(inventory.items[pressed_slot])
+	for item in inventory.items:
+		if item.display_name == potion.display_name:
+			item.reveal = true
+	for item in map.items:
+		if item.display_name == potion.display_name:
+			item.reveal = true
 	on_delete.emit()
 
 func use_food():
 	var food = inventory.items[pressed_slot]
 	heal(food.heal)
+	gui.add_line("Player healed for " + str(food.heal))
 	inventory.remove_item(inventory.items[pressed_slot])
 	on_delete.emit()
 

@@ -10,8 +10,12 @@ var items_num = 0
 var items_placed = []
 var item_weights = {
 	"food": 60,
-	"potion": 30,
+	"potion": 130,
 	"sword": 10
+}
+var potion_weights = {
+	"heal": 70,
+	"poison": 30,
 }
 
 var enemy_types = ["bat", "snake", "spider"]
@@ -100,8 +104,8 @@ func load_items():
 						item.display_name = item_resource.generate_latin_name()
 						item.type = potion_types[i]
 						item.description = potion_descriptions[i]
-						item.damage = 5
-						item.heal = 10
+						item.damage = 0
+						item.heal = 0
 						item.reveal = false
 						items.append(item)
 				else:
@@ -112,6 +116,7 @@ func load_items():
 					items.append(item)
 			file_name = dir.get_next()
 		dir.list_dir_end()
+		print_items()
 		
 func add_pathfinding():
 	pathfinder.region = Rect2i(0, 0, screen_width, screen_height)
@@ -172,7 +177,7 @@ func update_boss_spawn_chance():
 func generate_dungeon():
 	update_room_values()
 	enemies_num = 3 + (level * 2)
-	items_num = 2 + (randi() % level / 2)
+	items_num = 20 + (randi() % level / 2)
 	
 	grid = []
 	for x in range(width):
@@ -325,8 +330,9 @@ func weighted_random(weight_dict: Dictionary) -> String:
 func drop_item():
 	for item in items:
 		if item.name == "food":
-			item.heal = 1 + (level * 1.5);
-			player.inventory.add_item(item)
+			var temp = item.duplicate()
+			temp.heal = 1 + (level * 1.5);
+			player.inventory.add_item(temp)
 
 func _process(_delta):
 	reveal_tile(player.position)
@@ -337,7 +343,8 @@ func _process(_delta):
 					remove_child(enemy)	
 					enemies.erase(enemy)
 					drop_item()
-				enemy.move_enemy_towards_target()
+				else:
+					enemy.move_enemy_towards_target()
 		player.turn = true
 		
 func get_collison(p_position: Vector2, other_position: Vector2) -> bool:
@@ -431,23 +438,29 @@ func spawn_enemy(enemy_type: String):
 func place_items():
 	for i in range(items_num):
 		var spawn = weighted_random(item_weights);
+		var potion = weighted_random(potion_weights);
 		for item in items:
 			if item.name == spawn:
-				place_item(item, i)
-				break
+				if spawn == "potion":
+					if item.type == potion:
+						place_item(item, i)
+						break
+				else:
+					place_item(item, i)
+					break
 				
-func place_item(temp, item_count):
-	var item = temp.duplicate()
+func create_item(item):
 	if item.name == "sword":
-		item.damage = 5 + (level * 1.5);
+		item.damage = 5 + (level * 1.5) +  randf_range(-1, 2)
 	elif item.name == "food":
-		item.heal = 1 + (level * 1.5);
-	elif item.name == "spell":
+		item.heal = 1 + (level * 1.5) + randf_range(-0.5, 1.5) 
+	elif item.name == "potion":
 		if item.type == "heal":
-			item.heal = 4 + (level * 1.5);
-		elif item.type == "posion":
-			item.damage = 4 + (level * 1.5);
-		
+			item.heal = 4 + (level * 1.5) + randf_range(-2, 3) 
+		elif item.type == "poison":
+			item.damage = 4 + (level * 1.5) + randf_range(-2, 3) 
+
+func place_item(item, item_count):
 	var random_floor_tile = get_random_floor_tile()
 	var sprite_node = Sprite2D.new()
 	sprite_node.texture = item.texture
