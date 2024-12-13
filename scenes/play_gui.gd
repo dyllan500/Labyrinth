@@ -1,6 +1,7 @@
 extends Control
 
 signal inventory_toggled
+signal paused_toggled
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -33,3 +34,7 @@ func _on_player_inventory_toggled() -> void:
 	$InventoryUI.visible = !$InventoryUI.visible;
 	$Blur.visible = $InventoryUI.visible;
 	inventory_toggled.emit();
+
+func pause_toggled() -> void:
+	$Blur.visible = $InventoryUI.visible;
+	paused_toggled.emit();

@@ -33,7 +33,6 @@ func player_turn():
 	if   Input.is_action_just_pressed("ui_inventory_toggle"):
 		inventory_toggled.emit()
 	if	Input.is_action_just_pressed("pause"):
-		turn = false
 		paused_toggled.emit()
 		
 	if input_direction != Vector2(0, 0):
@@ -74,3 +73,7 @@ func _physics_process(_delta):
 	else:
 		if turn:
 			player_turn()
+
+
+func _on_paused_toggled() -> void:
+	pass # Replace with function body.
