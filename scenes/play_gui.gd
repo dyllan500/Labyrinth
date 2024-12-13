@@ -4,6 +4,16 @@ signal inventory_toggled
 signal paused_toggled
 signal refresh
 @export var pressed_slot = -1;
+var lines: Array = []
+const MAX_LINES = 4
+
+func add_line(new_line: String) -> void:
+	lines.append(new_line)
+	if lines.size() > MAX_LINES:
+		lines.pop_front()
+	$messages.clear()
+	for line in lines:
+		$messages.add_text(line + "\n")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

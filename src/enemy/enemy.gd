@@ -4,6 +4,7 @@ class_name Enemy extends CharacterBody2D
 @export var health: float = 100.0
 @export var attack: float = 10.0
 @onready var player: CharacterBody2D = get_node("/root/Game/Player")
+@onready var gui: Control = get_node("/root/Game/PlayGui")
 
 func _ready():
 	collision_layer = 2
@@ -31,7 +32,7 @@ func move_enemy_towards_target():
 		if target_position == player.position:
 				move = false
 				player.take_damage(attack)
-				print("hit_player")
+				gui.add_line("Enemy hit player for " + str(attack))
 		for enemey in map.enemies:
 			if target_position == enemey.position:
 				move = false

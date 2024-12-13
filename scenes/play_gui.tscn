@@ -34,6 +34,24 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0)
 
+[node name="messages" type="RichTextLabel" parent="."]
+layout_mode = 2
+offset_left = 10.0
+offset_top = 42.0
+offset_right = 326.0
+offset_bottom = 172.0
+theme_override_colors/table_border = Color(1, 1, 1, 1)
+theme_override_colors/table_even_row_bg = Color(1, 1, 1, 1)
+theme_override_colors/table_odd_row_bg = Color(1, 1, 1, 1)
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
+theme_override_colors/selection_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+bbcode_enabled = true
+fit_content = true
+scroll_following = true
+
 [node name="TopLeft" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 10.0
