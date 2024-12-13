@@ -10,7 +10,7 @@ var items_num = 0
 var items_placed = []
 var item_weights = {
 	"food": 60,
-	"potion": 130,
+	"potion": 30,
 	"sword": 10
 }
 var potion_weights = {
@@ -116,7 +116,6 @@ func load_items():
 					items.append(item)
 			file_name = dir.get_next()
 		dir.list_dir_end()
-		print_items()
 		
 func add_pathfinding():
 	pathfinder.region = Rect2i(0, 0, screen_width, screen_height)
@@ -177,7 +176,7 @@ func update_boss_spawn_chance():
 func generate_dungeon():
 	update_room_values()
 	enemies_num = 3 + (level * 2)
-	items_num = 20 + (randi() % level / 2)
+	items_num = 8 + (randi() % level / 2)
 	
 	grid = []
 	for x in range(width):
@@ -295,7 +294,7 @@ func draw_dungeon():
 				sprite_node.name = "Floor" + str(count)
 			if sprite_node:
 				sprite_node.position = Vector2(x * tile_size, y * tile_size)
-				sprite_node.visible = true
+				sprite_node.visible = false
 				add_child(sprite_node)
 				if collision_node:
 					collision_node.position = Vector2(x * tile_size + 8, y * tile_size + 8)
@@ -416,7 +415,7 @@ func place_door():
 	var random_floor_tile = get_random_floor_tile()
 	door_node.position =  random_floor_tile * tile_size
 	door_node.name = "Door_Node"
-	door_node.visible = true
+	door_node.visible = false
 	add_child(door_node)
 	
 func spawn_enemies():
@@ -432,6 +431,7 @@ func spawn_enemy(enemy_type: String):
 	var enemy_instance = enemy_scene.instantiate()
 	var random_floor_tile = get_random_floor_tile()
 	enemy_instance.position = random_floor_tile * tile_size
+	enemy_instance.visible = false
 	add_child(enemy_instance)
 	enemies.append(enemy_instance)
 
@@ -465,7 +465,7 @@ func place_item(item, item_count):
 	var sprite_node = Sprite2D.new()
 	sprite_node.texture = item.texture
 	sprite_node.position = Vector2(random_floor_tile.x * tile_size + 8, random_floor_tile.y * tile_size + 8)
-	sprite_node.visible = true
+	sprite_node.visible = false
 	sprite_node.name = "ITEM_" + item.display_name + "_" + str(item_count) + "_Sprite"
 	add_child(sprite_node)
 	items_placed.append(sprite_node)

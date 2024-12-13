@@ -50,6 +50,7 @@ func player_turn():
 			if pressed_slot >= 0 and pressed_slot < inventory.items.size():
 				if inventory.items[pressed_slot].name == "sword":
 					equiped = inventory.items[pressed_slot]
+					gui.add_line("Player equipped sword with " + str(equiped.damage))
 				elif inventory.items[pressed_slot].name == "potion":
 					use_potion()
 				elif inventory.items[pressed_slot].name == "food":
