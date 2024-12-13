@@ -84,13 +84,14 @@ func player_turn():
 					var item_name = i.name.split("_")[1]
 					for item in map.items:
 						if item.display_name == item_name:
-							if(inventory.add_item(item)):
+							var temp = item.duplicate()
+							map.create_item(temp)
+							if(inventory.add_item(temp)):
 								for child in map.get_children():
 									if child.name.contains(i.name):
 										map.remove_child(child)
 		if move:
 			position = target_position
-			print(target_position)
 
 func use_potion():
 	var potion = inventory.items[pressed_slot]
@@ -101,6 +102,12 @@ func use_potion():
 		take_damage(potion.damage)
 		gui.add_line("Player damaged for " + str(potion.damage))
 	inventory.remove_item(inventory.items[pressed_slot])
+	for item in inventory.items:
+		if item.display_name == potion.display_name:
+			item.reveal = true
+	for item in map.items:
+		if item.display_name == potion.display_name:
+			item.reveal = true
 	on_delete.emit()
 
 func use_food():
