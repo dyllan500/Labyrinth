@@ -44,7 +44,7 @@ var max_rooms = 10
 var level = 1
 var boss_spawn_chance = 0
 var boss_count = 1
-var boss_level: bool = true
+var boss_level: bool = false
 
 var scan_range: Rect2
 const entity_pathfinding_weight = 10.0

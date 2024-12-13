@@ -106,6 +106,15 @@ func use_food():
 	inventory.remove_item(inventory.items[pressed_slot])
 	on_delete.emit()
 
+func update_hearts():
+	var hearts = gui.get_node("TopLeft/HealthBar")
+	var visible_hearts = health / 10
+	for i in range(10):
+		if i < visible_hearts:
+			hearts.get_child(i).visible = true
+		else:
+			hearts.get_child(i).visible = false
+
 func _physics_process(_delta):
 	if map.loading_map:
 		position = map.player_position
@@ -118,6 +127,7 @@ func _physics_process(_delta):
 			pressed_slot = gui.pressed_slot
 	else:
 		pressed_slot = -1
+	update_hearts()
 
 func _on_paused_toggled() -> void:
 	pass # Replace with function body.

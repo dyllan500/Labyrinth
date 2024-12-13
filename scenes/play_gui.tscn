@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bxgy4dcf3kswu"]
+[gd_scene load_steps=8 format=3 uid="uid://bxgy4dcf3kswu"]
 
 [ext_resource type="PackedScene" uid="uid://c5o21xbdebyi2" path="res://scenes/heart.tscn" id="1_1o18x"]
 [ext_resource type="Shader" path="res://scenes/blur.gdshader" id="1_buxf8"]
@@ -10,14 +10,6 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6h0pc"]
 shader = ExtResource("1_buxf8")
 shader_parameter/lod = 2.0
-
-[sub_resource type="SystemFont" id="SystemFont_lss1m"]
-font_italic = true
-subpixel_positioning = 0
-
-[sub_resource type="Theme" id="Theme_j2gmk"]
-default_font_size = 28
-Label/fonts/font = SubResource("SystemFont_lss1m")
 
 [node name="PlayGui" type="Control"]
 z_index = 10
@@ -65,12 +57,33 @@ layout_mode = 2
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 
-[node name="Score" type="Label" parent="TopLeft"]
-texture_filter = 1
+[node name="Heart4" parent="TopLeft/HealthBar" instance=ExtResource("1_1o18x")]
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
-theme = SubResource("Theme_j2gmk")
-text = "Score"
-vertical_alignment = 1
+
+[node name="Heart5" parent="TopLeft/HealthBar" instance=ExtResource("1_1o18x")]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+
+[node name="Heart6" parent="TopLeft/HealthBar" instance=ExtResource("1_1o18x")]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+
+[node name="Heart7" parent="TopLeft/HealthBar" instance=ExtResource("1_1o18x")]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+
+[node name="Heart8" parent="TopLeft/HealthBar" instance=ExtResource("1_1o18x")]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+
+[node name="Heart9" parent="TopLeft/HealthBar" instance=ExtResource("1_1o18x")]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+
+[node name="Heart10" parent="TopLeft/HealthBar" instance=ExtResource("1_1o18x")]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
 
 [node name="InventoryUI" type="MarginContainer" parent="."]
 visible = false
