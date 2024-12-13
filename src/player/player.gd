@@ -8,6 +8,7 @@ class_name Player extends CharacterBody2D
 @export var equipped: Inventory_Item
 
 signal inventory_toggled
+signal paused_toggled
 
 func take_damage(damage):
 	health = health - damage
@@ -31,6 +32,9 @@ func player_turn():
 		input_direction = Vector2(0,1)
 	if   Input.is_action_just_pressed("ui_inventory_toggle"):
 		inventory_toggled.emit()
+	if	Input.is_action_just_pressed("pause"):
+		turn = false
+		paused_toggled.emit()
 		
 	if input_direction != Vector2(0, 0):
 		turn = false
