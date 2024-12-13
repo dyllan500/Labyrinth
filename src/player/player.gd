@@ -13,6 +13,7 @@ var equiped : Inventory_Item = null
 signal inventory_toggled
 signal paused_toggled
 signal on_delete
+signal you_died
 
 func start_equipped():
 	equiped = inventory.items[0]
@@ -20,7 +21,8 @@ func start_equipped():
 func take_damage(damage):
 	health = health - damage
 	if (health <= 0):
-		pass #END game
+		paused = true
+		you_died.emit();
 
 func heal(add):
 	health = health + add

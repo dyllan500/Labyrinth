@@ -275,14 +275,15 @@ offset_right = 1278.0
 offset_bottom = 507.0
 texture = ExtResource("7_nkwau")
 
-[node name="DiedGameOverLabel" type="TextureRect" parent="."]
+[node name="DeathButton" type="Button" parent="."]
 visible = false
 layout_mode = 0
-offset_left = 510.0
-offset_top = 289.0
-offset_right = 1373.0
-offset_bottom = 499.0
-texture = ExtResource("8_basvd")
+offset_left = 785.0
+offset_top = 375.0
+offset_right = 1133.0
+offset_bottom = 443.0
+disabled = true
+icon = ExtResource("8_basvd")
 
 [connection signal="inventory_toggled" from="." to="InventoryUI/InventoryRows/Row1/Button1" method="_on_play_gui_inventory_toggled"]
 [connection signal="inventory_toggled" from="." to="InventoryUI/InventoryRows/Row1/Button2" method="_on_play_gui_inventory_toggled"]
@@ -365,3 +366,4 @@ texture = ExtResource("8_basvd")
 [connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row4/Button4" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [18]]
 [connection signal="button_clicked" from="InventoryUI/InventoryRows/Row4/Button5" to="." method="_on_button_button_clicked"]
 [connection signal="mouse_entered" from="InventoryUI/InventoryRows/Row4/Button5" to="InventoryUI/InventoryRows/MarginContainer/HBoxContainer/TextBox" method="_on_inventory_button_hover" binds= [19]]
+[connection signal="pressed" from="DeathButton" to="." method="_on_death_button_pressed"]
