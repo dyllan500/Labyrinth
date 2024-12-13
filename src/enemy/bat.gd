@@ -4,3 +4,4 @@ func _ready():
 	name = "Enemy_bat"
 	health = 10
 	attack = 6
+	score = 5

@@ -4,3 +4,4 @@ func _ready():
 	name = "Enemy_snake"
 	health = 50
 	attack = 12
+	score = 50

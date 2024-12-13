@@ -341,6 +341,7 @@ func _process(_delta):
 				if(enemy.health <= 0):
 					remove_child(enemy)	
 					enemies.erase(enemy)
+					player.score = enemy.score + player.score
 					drop_item()
 				else:
 					enemy.move_enemy_towards_target()

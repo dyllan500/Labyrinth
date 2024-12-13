@@ -4,3 +4,4 @@ func _ready():
 	name = "Enemy_minotaur"
 	health = 150
 	attack = 25
+	score = 1000

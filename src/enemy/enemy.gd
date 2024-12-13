@@ -2,6 +2,7 @@ class_name Enemy extends CharacterBody2D
 @onready var map: Node2D = get_node("/root/Game/Map")
 @export var tile_size = 16
 @export var health: float = 100.0
+@export var score: float = 100.0
 @export var attack: float = 10.0
 @onready var player: CharacterBody2D = get_node("/root/Game/Player")
 @onready var gui: Control = get_node("/root/Game/PlayGui")

@@ -9,6 +9,7 @@ var paused: bool = false
 var inventory_screen: bool = false
 var pressed_slot = -1;
 var equiped : Inventory_Item = null
+var score: int = 0
 
 signal inventory_toggled
 signal paused_toggled
@@ -142,3 +143,4 @@ func _physics_process(_delta):
 	else:
 		pressed_slot = -1
 	update_hearts()
+	gui.get_node("score").text = str(score)

@@ -285,6 +285,21 @@ offset_bottom = 443.0
 disabled = true
 icon = ExtResource("8_basvd")
 
+[node name="score" type="Label" parent="."]
+offset_left = 100.0
+offset_top = 131.0
+offset_right = 326.0
+offset_bottom = 176.0
+theme_override_font_sizes/font_size = 32
+text = "0"
+
+[node name="Label" type="Label" parent="."]
+offset_top = 130.0
+offset_right = 83.0
+offset_bottom = 175.0
+theme_override_font_sizes/font_size = 32
+text = "Score:"
+
 [connection signal="inventory_toggled" from="." to="InventoryUI/InventoryRows/Row1/Button1" method="_on_play_gui_inventory_toggled"]
 [connection signal="inventory_toggled" from="." to="InventoryUI/InventoryRows/Row1/Button2" method="_on_play_gui_inventory_toggled"]
 [connection signal="inventory_toggled" from="." to="InventoryUI/InventoryRows/Row1/Button3" method="_on_play_gui_inventory_toggled"]
