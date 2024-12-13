@@ -130,6 +130,7 @@ func add_sword():
 		if item.name == "sword":
 			item.damage = 10
 			player.inventory.add_item(item)
+			player.start_equipped()
 	
 func new_map():
 	loading_map = true

@@ -2,6 +2,8 @@ extends Control
 
 signal inventory_toggled
 signal paused_toggled
+signal refresh
+@export var pressed_slot = -1;
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -38,3 +40,9 @@ func _on_player_inventory_toggled() -> void:
 func pause_toggled() -> void:
 	$Blur.visible = $InventoryUI.visible;
 	paused_toggled.emit();
+
+func _on_button_button_clicked(slot: int):
+	pressed_slot = slot
+
+func _on_player_on_delete():
+	refresh.emit();

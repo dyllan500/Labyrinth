@@ -1,14 +1,21 @@
 class_name Player extends CharacterBody2D
 @onready var map: Node2D = get_node("/root/Game/Map")
+@onready var gui: Control = get_node("/root/Game/PlayGui")
 @export var TILE_SIZE = 16
 @export var health : float = 100.0
-@export var attack : float = 10.0
 @export var inventory: Inventory
 @export var turn: bool = true
-@export var equipped: Inventory_Item
+var paused: bool = false
+var inventory_screen: bool = false
+var pressed_slot = -1;
+var equiped : Inventory_Item = null
 
 signal inventory_toggled
 signal paused_toggled
+signal on_delete
+
+func start_equipped():
+	equiped = inventory.items[0]
 
 func take_damage(damage):
 	health = health - damage
@@ -31,11 +38,29 @@ func player_turn():
 	elif Input.is_action_just_pressed("down"):
 		input_direction = Vector2(0,1)
 	if   Input.is_action_just_pressed("ui_inventory_toggle"):
-		inventory_toggled.emit()
-	if	Input.is_action_just_pressed("pause"):
-		paused_toggled.emit()
+		if not paused:
+			inventory_toggled.emit()
+			inventory_screen = not inventory_screen
+	if   Input.is_action_just_pressed("pause"):
+		if not inventory_screen:
+			paused_toggled.emit()
+			paused = not paused
+	if   Input.is_action_just_pressed("equip"):
+		if inventory_screen:
+			if pressed_slot >= 0 and pressed_slot < inventory.items.size():
+				if inventory.items[pressed_slot].name == "sword":
+					equiped = inventory.items[pressed_slot]
+				elif inventory.items[pressed_slot].name == "potion":
+					use_potion()
+				elif inventory.items[pressed_slot].name == "food":
+					use_food()
+	if   Input.is_action_just_pressed("delete"):
+		if inventory_screen:
+			if pressed_slot >= 0 and pressed_slot < inventory.items.size():
+				inventory.remove_item(inventory.items[pressed_slot])
+				on_delete.emit()
 		
-	if input_direction != Vector2(0, 0):
+	if input_direction != Vector2(0, 0) and not paused and not inventory_screen:
 		turn = false
 		var move = true
 		var target_position = map.get_floor(position + input_direction * TILE_SIZE)
@@ -43,9 +68,9 @@ func player_turn():
 			move = false
 		for enemy in map.enemies:
 			if target_position == enemy.position:
-				enemy.take_damage(attack)
+				enemy.take_damage(equiped.damage)
 				print("hit_enemy")
-				move = false	
+				move = false
 		for i in map.get_children():
 			if map.get_collison(target_position, i.position):
 				if i.name.contains("Door_Node"):
@@ -65,7 +90,22 @@ func player_turn():
 										map.remove_child(child)
 		if move:
 				position = target_position
-	
+
+func use_potion():
+	var potion = inventory.items[pressed_slot]
+	if potion.heal > 0:
+		heal(potion.heal)
+	else:
+		take_damage(potion.damage)
+	inventory.remove_item(inventory.items[pressed_slot])
+	on_delete.emit()
+
+func use_food():
+	var food = inventory.items[pressed_slot]
+	heal(food.heal)
+	inventory.remove_item(inventory.items[pressed_slot])
+	on_delete.emit()
+
 func _physics_process(_delta):
 	if map.loading_map:
 		position = map.player_position
@@ -73,7 +113,11 @@ func _physics_process(_delta):
 	else:
 		if turn:
 			player_turn()
-
+	if inventory_screen:
+		if gui.pressed_slot != -1:
+			pressed_slot = gui.pressed_slot
+	else:
+		pressed_slot = -1
 
 func _on_paused_toggled() -> void:
 	pass # Replace with function body.

@@ -4,7 +4,7 @@ class_name Inventory
 signal item_added(item)
 signal item_removed(item)
 
-static var items : Array = [Inventory_Item]
+static var items : Array = []
 
 @export var max_size: int = 20
 

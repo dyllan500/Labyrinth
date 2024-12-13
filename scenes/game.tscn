@@ -22,3 +22,4 @@ collision_layer = 7
 collision_mask = 2
 
 [connection signal="inventory_toggled" from="Player" to="PlayGui" method="_on_player_inventory_toggled"]
+[connection signal="on_delete" from="Player" to="PlayGui" method="_on_player_on_delete"]
