@@ -9,7 +9,7 @@ class_name Enemy extends CharacterBody2D
 func _ready():
 	collision_layer = 2
 	collision_mask = 3
-	visible = true
+	visible = false
 	name = "Enemy"
 
 func _process(_delta):
