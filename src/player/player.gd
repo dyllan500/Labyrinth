@@ -128,6 +128,3 @@ func _physics_process(_delta):
 	else:
 		pressed_slot = -1
 	update_hearts()
-
-func _on_paused_toggled() -> void:
-	pass # Replace with function body.

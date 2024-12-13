@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bxgy4dcf3kswu"]
+[gd_scene load_steps=10 format=3 uid="uid://bxgy4dcf3kswu"]
 
 [ext_resource type="PackedScene" uid="uid://c5o21xbdebyi2" path="res://scenes/heart.tscn" id="1_1o18x"]
 [ext_resource type="Shader" path="res://scenes/blur.gdshader" id="1_buxf8"]
@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://csljrk45f7ul1" path="res://assets/9patch.png" id="2_uwrvp"]
 [ext_resource type="PackedScene" uid="uid://bjuw33amb8ur0" path="res://scenes/inventory_button.tscn" id="3_6m7n6"]
 [ext_resource type="Script" path="res://scenes/inventory_text.gd" id="6_t8npc"]
+[ext_resource type="Texture2D" uid="uid://p3dvdb0tlbgt" path="res://assets/GamePaused.png" id="7_nkwau"]
+[ext_resource type="Texture2D" uid="uid://dad5x37e5p3b2" path="res://assets/GameOverLabel.png" id="8_basvd"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6h0pc"]
 shader = ExtResource("1_buxf8")
@@ -253,6 +255,24 @@ layout_mode = 2
 [node name="Seperator5" type="Control" parent="InventoryUI/InventoryRows"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
+
+[node name="GamePausedLabel" type="TextureRect" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 625.0
+offset_top = 318.0
+offset_right = 1278.0
+offset_bottom = 507.0
+texture = ExtResource("7_nkwau")
+
+[node name="DiedGameOverLabel" type="TextureRect" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 510.0
+offset_top = 289.0
+offset_right = 1373.0
+offset_bottom = 499.0
+texture = ExtResource("8_basvd")
 
 [connection signal="inventory_toggled" from="." to="InventoryUI/InventoryRows/Row1/Button1" method="_on_play_gui_inventory_toggled"]
 [connection signal="inventory_toggled" from="." to="InventoryUI/InventoryRows/Row1/Button2" method="_on_play_gui_inventory_toggled"]

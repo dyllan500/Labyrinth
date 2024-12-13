@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://dlnv4ic502xi5"]
+
+[ext_resource type="Texture2D" uid="uid://p3dvdb0tlbgt" path="res://assets/GamePaused.png" id="2_fadlk"]
+
+[sub_resource type="GDScript" id="GDScript_dgdtg"]
+script/source = "extends Control
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[node name="PauseScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_dgdtg")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 665.0
+offset_top = 258.0
+offset_right = 1296.0
+offset_bottom = 446.0
+texture = ExtResource("2_fadlk")

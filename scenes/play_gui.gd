@@ -38,7 +38,12 @@ func _on_player_inventory_toggled() -> void:
 	inventory_toggled.emit();
 
 func pause_toggled() -> void:
-	$Blur.visible = $InventoryUI.visible;
+	if $GamePausedLabel.visible == false:
+		$GamePausedLabel.visible = true;
+		$Blur.visible = true;
+	else:
+		$GamePausedLabel.visible = false;
+		$Blur.visible = false;
 	paused_toggled.emit();
 
 func _on_button_button_clicked(slot: int):
